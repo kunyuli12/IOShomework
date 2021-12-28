@@ -15,6 +15,8 @@ struct ProductView: View {
     @State var weight = ""
     @State var place = ""
     @State var times = ""
+    @State var FooodInfrom = ""
+    @State var FoodEffect = ""
     
     @State var onoff : Bool = false
     
@@ -47,15 +49,15 @@ struct ProductView: View {
                             .padding(.leading,10)
                             .padding(.bottom,5)
                             .foregroundColor(.blue)
-                        
-                        Image(systemName:"exclamationmark.circle.fill")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(.yellow)
-                            .padding(.bottom,5)
-                            .onTapGesture {
-                                onoff.toggle()
-                            }
+                        Button {
+                            onoff.toggle()
+                        } label: {
+                            Image(systemName:"exclamationmark.circle.fill")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.yellow)
+                                .padding(.bottom,5)
+                        }
                         Spacer()
                     }
                   /*  buybuttom()
@@ -68,9 +70,30 @@ struct ProductView: View {
                 }
                 Spacer()
             }
-            Productnews(onoff: .constant(false)).offset(x: onoff ? 0:1000)
+            ZStack{
+            Productnews(FooodInfrom: FooodInfrom, FoodEffect:FoodEffect ).offset(x: onoff ? 0:1000)
+            comeback().offset(x: onoff ? 0:1000)
+            }.frame(width:350, height: 600)
         }
     }
+    
+    @ViewBuilder func comeback () -> some View {
+        HStack {
+            VStack {
+                Button {
+                    onoff.toggle()
+                } label: {
+                    Image(systemName: "arrowshape.turn.up.backward.circle.fill")
+                        .resizable()
+                        .frame(width: 30, height:30)
+                        .padding()
+                }
+                Spacer()
+            }
+            Spacer()
+        }
+    }
+    
 }
 
 struct ProductView_Previews: PreviewProvider {
@@ -94,47 +117,34 @@ struct textmod:ViewModifier{
 
 struct Productnews: View {
     
-    @Binding var onoff : Bool
+    @State var FooodInfrom = ""
+    @State var FoodEffect = ""
     
     var body: some View {
         ZStack {
             TabView{
                 ZStack {
                     Rectangle()
-                        .frame(width:200, height: 200)
+                        .frame(width:350, height: 600)
                         .foregroundColor(.gray)
                        
                     VStack {
-                        Text("Hollow")
-                        Text("")
+                        Text("\(FooodInfrom)")
+                        frame(width: 300, height: 500)
                     }
                 }
                 ZStack {
                     Rectangle()
-                        .frame(width:200, height: 200)
+                        .frame(width:350, height: 600)
                         .foregroundColor(.gray)
                         
                     VStack {
-                        Text("Hollowsss")
-                        Text("")
+                        Text("\(FoodEffect)")
+                            .frame(width: 300, height: 500)
                     }
                 }
             } .tabViewStyle(PageTabViewStyle())
-            HStack {
-                VStack {
-                    Image(systemName: "arrowshape.turn.up.backward.circle.fill")
-                        .resizable()
-                        .frame(width: 30, height:30)
-                        .padding(4)
-                        .onTapGesture {
-                            onoff.toggle()
-                        }
-                    Spacer()
-                }
-                Spacer()
-            }
-        }.frame(width:200, height: 200)
-           
-            
+          
+        }.frame(width:350, height: 600)
     }
 }
