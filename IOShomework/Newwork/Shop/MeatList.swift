@@ -38,7 +38,7 @@ struct MeatList: View {
                 ForEach(MyData.Shoppings){ mu in //mu 是每次回圈時所帶的值
                     NavigationLink{
                         VStack {
-                            ProductView(image: mu.menu.ItemView, Itemname: mu.menu.name, money: mu.menu.prise, weight: mu.infrom.foodweight, place: mu.infrom.foodplace, times: mu.infrom.foodtime ,FooodInfrom: mu.infrom.Healtinfrom,FoodEffect: mu.infrom.foodeffect)
+                            ProductView(image: mu.menu.ItemView, Itemname: mu.menu.name, money: mu.menu.prise, weight: mu.infrom.foodweight, place: mu.infrom.foodplace, times: mu.infrom.foodtime )
                             
                             buybuttom()
                                 .padding(.top,15)

@@ -15,8 +15,6 @@ struct ProductView: View {
     @State var weight = ""
     @State var place = ""
     @State var times = ""
-    @State var FooodInfrom = ""
-    @State var FoodEffect = ""
     
     @State var onoff : Bool = false
     
@@ -71,8 +69,8 @@ struct ProductView: View {
                 Spacer()
             }
             ZStack{
-            Productnews(FooodInfrom: FooodInfrom, FoodEffect:FoodEffect ).offset(x: onoff ? 0:1000)
-            comeback().offset(x: onoff ? 0:1000)
+            Productnews().offset(x: onoff ? 0:800)
+            comeback().offset(x: onoff ? 0:800)
             }.frame(width:350, height: 600)
         }
     }
@@ -117,9 +115,6 @@ struct textmod:ViewModifier{
 
 struct Productnews: View {
     
-    @State var FooodInfrom = ""
-    @State var FoodEffect = ""
-    
     var body: some View {
         ZStack {
             TabView{
@@ -129,8 +124,7 @@ struct Productnews: View {
                         .foregroundColor(.gray)
                        
                     VStack {
-                        Text("\(FooodInfrom)")
-                        frame(width: 300, height: 500)
+                        Text("hollow")
                     }
                 }
                 ZStack {
@@ -139,12 +133,10 @@ struct Productnews: View {
                         .foregroundColor(.gray)
                         
                     VStack {
-                        Text("\(FoodEffect)")
-                            .frame(width: 300, height: 500)
+                        Text("Hollow")
                     }
                 }
             } .tabViewStyle(PageTabViewStyle())
-          
         }.frame(width:350, height: 600)
     }
 }
