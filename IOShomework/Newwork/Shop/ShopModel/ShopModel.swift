@@ -14,13 +14,13 @@ struct menu: Identifiable,Hashable,Codable{
     var ItemView:String
     var prise:String
     var name:String
+    var infrom:foodinfrom
 }
 
 struct Oder: Identifiable,Hashable,Codable{
     var id = UUID().uuidString
     var menu:menu
     var numbers:Int
-    var infrom:foodinfrom
     
 }
 
@@ -31,67 +31,63 @@ struct foodinfrom: Identifiable,Hashable,Codable{
     var foodtime:String
 }
 
-struct order: Identifiable,Hashable,Codable{
+struct order:Identifiable,Hashable,Codable {
     var id = UUID().uuidString
-    var order:Oder
-    var qauntity:Int
+    var onOrder:[Oder]
 }
+
 
                //傳值
 class ShopMenu:ObservableObject {
     
     @Published var en_number = 0
-    @Published var Shoppings:[Oder] = [Oder]() //要回傳的，所以要先去宣告一個職
-    @Published var showOrder = [order]()
+    @Published var Shoppings:[menu] = [menu]() //要回傳的，所以要先去宣告一個職
+    @Published var showOrder = [Oder]()
+    @Published var Orders = [order]()
     
     init(){
         shoping()
+        Orders = [
+            order(onOrder: showOrder)
+        ]
     }
     func shoping()  {
          Shoppings = [
-            Oder(menu: menu(ItemView: "Broccoli", prise: "80", name: "花椰菜"), numbers: 9,infrom:foodinfrom(foodweight: "2台斤", foodplace: "台南", foodtime: "冷藏５～７天")),
-            Oder(menu: menu(ItemView: "Cabbage", prise: "70", name: "高麗菜"), numbers: 9,infrom:foodinfrom(foodweight: "3台斤", foodplace: "台東", foodtime: "冷藏2～4天")),
-            Oder(menu: menu(ItemView: "AlfalfaSprouts", prise: "45", name: "苜蓿芽"), numbers: 9,infrom:foodinfrom(foodweight: "1.5台斤", foodplace: "台南", foodtime: "冷藏3～6天")),
-            Oder(menu: menu(ItemView: "Tofu", prise: "30", name: "豆腐"), numbers: 9,infrom:foodinfrom(foodweight: "2台斤", foodplace: "台東", foodtime: "冷藏6～9天")),
-            Oder(menu: menu(ItemView: "cucumber", prise: "55", name: "小黃瓜"), numbers: 9,infrom:foodinfrom(foodweight: "2台斤", foodplace: "台中", foodtime: "冷4～5天"))
+           menu(ItemView: "Broccoli", prise: "80", name: "花椰菜",infrom:foodinfrom(foodweight: "2台斤", foodplace: "台南", foodtime: "冷藏５～７天")),
+           menu(ItemView: "Cabbage", prise: "70", name: "高麗菜",infrom:foodinfrom(foodweight: "3台斤", foodplace: "台東", foodtime: "冷藏2～4天")),
+           menu(ItemView: "AlfalfaSprouts", prise: "45", name: "苜蓿芽",infrom:foodinfrom(foodweight: "1.5台斤", foodplace: "台南", foodtime: "冷藏3～6天")),
+           menu(ItemView: "Tofu", prise: "30", name: "豆腐",infrom:foodinfrom(foodweight: "2台斤", foodplace: "台東", foodtime: "冷藏6～9天")),
+           menu(ItemView: "cucumber", prise: "55", name: "小黃瓜",infrom:foodinfrom(foodweight: "2台斤", foodplace: "台中", foodtime: "冷4～5天"))
         ]
        
     }
     
-    func addOrder(value:Oder){
+   
+    func addOrder(value:menu){
         let Index = showOrder.firstIndex(where: { od in
-            od.order.menu.name == value.menu.name
+            od.menu.name == value.name
         })
         if (Index != nil) {
-            showOrder[Index!].qauntity += 1
+            showOrder[Index!].numbers += 1
         }else{
-        showOrder.append(order(order: value, qauntity: 1))
+            showOrder.append(Oder(menu: value, numbers: 1))
         }
     }
     
 }
 
-/*    func addOrder(value:menu) {
- let isHaveIndex = orderMenus.firstIndex(where: { od in
-     od.menu.title == value.title
- })
- 
- if (isHaveIndex != nil) {
-     orderMenus[isHaveIndex!].qauntity += 1
- }else{
-     orderMenus.append(orderMenu(menu: value, qauntity: 1))
+/*
+ func addOrderA(value:Oder){
+     let Index = showOrder.firstIndex(where: { od in
+         od.order.menu.name == value.menu.name
+     })
+     if (Index != nil) {
+         showOrder[Index!].qauntity += 1
+     }else{
+     showOrder.append(order(order: value, qauntity: 1))
+     }
  }
- 
-}
 */
-
-
-
-
-
-
-
-
 
 
 

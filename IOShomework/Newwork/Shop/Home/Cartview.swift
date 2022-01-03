@@ -10,6 +10,7 @@ import SwiftUI
 struct Cartview: View {
     
     @EnvironmentObject var MyData:ShopMenu
+    @State var isshow = false
     
     var body: some View {
         VStack {
@@ -32,10 +33,11 @@ struct Cartview: View {
                     }
                     Spacer()
                     HStack {
-                        Rectangle()
+                        Text("s")
+                            .font(.title2)
                             .frame(width: 56, height: 40)
                             .cornerRadius(5)
-                            .foregroundColor(Color("healthybuttom3"))
+                            .background(Color("healthybuttom3"))
                         Image(systemName: "minus.square.fill")
                             .resizable()
                             .frame(width: 40, height: 40)
@@ -49,44 +51,86 @@ struct Cartview: View {
                     }
                     Spacer()
                 }
-                VStack{
-                    ForEach(MyData.showOrder){ od in
-                        HStack {
-                            Image("\(od.order.menu.ItemView)")
-                                .resizable()
-                                .frame(width: 100, height: 100)
-                                .cornerRadius(10)
-                                .padding(.leading,20)
-                            VStack {
-                                Text("\(od.order.menu.name)")
-                                    .font(.title)
-                                Text("(\(od.order.infrom.foodweight)/一份|\(od.order.menu.prise)元)")
-                            }
-                            Spacer()
-                        }
-                    }
-                }
+                foodmenu()
             }
             Spacer()
-            HStack {
-                VStack{
-                    Text("小計：")
-                        .font(.title2)
-                    Text("運費：")
-                        .font(.title2)
-                    Text("總共：")
-                        .font(.title2)
-                }.padding(.leading,10)
-                Spacer()
-                Text("購買")
-                    .font(.title)
-                    .frame(width: 85, height: 85)
-                    .background(Color(.gray))
-                    .cornerRadius(5)
-                    .padding(.trailing,10)
-            }
+            BuyView()
             Spacer()
                 .frame(height: 20)
+        }
+    }
+    @ViewBuilder func foodmenu() -> some View{
+        VStack{
+            ForEach(MyData.showOrder){ od in
+                HStack {
+                    Image("\(od.menu.ItemView)")
+                        .resizable()
+                        .frame(width: 100, height: 100)
+                        .cornerRadius(10)
+                        .padding(.leading,20)
+                    VStack {
+                        Text("\(od.menu.name)")
+                            .font(.title)
+                        Text("(\(od.menu.infrom.foodweight)/一份|\(od.menu.prise)元)")
+                    }
+                    Spacer()
+                    HStack {
+                        Text("\(od.numbers)")
+                            .font(.title2)
+                            .frame(width: 56, height: 40)
+                            .cornerRadius(5)
+                            .background(Color("healthybuttom3"))
+                        Image(systemName: "minus.square.fill")
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                            .foregroundColor(.gray)
+                            .cornerRadius(5)
+                        Image(systemName: "plus.square.fill")
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                            .foregroundColor(.gray)
+                            .cornerRadius(5)
+                    }.padding(.leading,15)
+                    Spacer()
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder func BuyView() -> some View{
+        HStack {
+            VStack{
+                Text("小計：")
+                    .font(.title2)
+                Text("運費：")
+                    .font(.title2)
+                Text("總共：")
+                    .font(.title2)
+            }.padding(.leading,10)
+            Spacer()
+            Text("購買")
+                .font(.title)
+                .frame(width: 85, height: 85)
+                .background(Color(.gray))
+                .cornerRadius(5)
+                .padding(.trailing,10)
+                .onTapGesture {
+                    MyData.Orders.append(order(onOrder: MyData.showOrder))
+                    MyData.showOrder.removeAll()
+                    isshow.toggle()
+                }
+        }
+}
+    @ViewBuilder func CheckView() -> some View{
+        VStack{
+            Text("確定結帳？")
+                .font(.title)
+            Text("確定")
+                .font(.title)
+                .onTapGesture {
+                
+                    isshow.toggle()
+                }
         }
     }
 }

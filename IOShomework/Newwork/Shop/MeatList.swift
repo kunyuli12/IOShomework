@@ -38,7 +38,7 @@ struct MeatList: View {
                 ForEach(MyData.Shoppings){ mu in //mu 是每次回圈時所帶的值
                     NavigationLink{
                         VStack {
-                            ProductView(image: mu.menu.ItemView, Itemname: mu.menu.name, money: mu.menu.prise, weight: mu.infrom.foodweight, place: mu.infrom.foodplace, times: mu.infrom.foodtime )
+                            ProductView(image: mu.ItemView, Itemname: mu.name, money: mu.prise, weight: mu.infrom.foodweight, place: mu.infrom.foodplace, times: mu.infrom.foodtime)
                             
                             buybuttom()
                                 .padding(.top,15)
@@ -48,21 +48,21 @@ struct MeatList: View {
                             .cornerRadius(10)
                             .background(Color(.gray))
                             .onTapGesture {
-                                MyData.addOrder(value: mu)
+                                MyData.addOrder(value: mu )
                             }
                         }
                     } label:{
                         HStack{
-                            Image("\(mu.menu.ItemView)")
+                            Image("\(mu.ItemView)")
                                 .resizable()
                                 .frame(width: 110, height: 110)
                                 .cornerRadius(20)
                             VStack{
-                                Text("\(mu.menu.name)")
+                                Text("\(mu.name)")
                                     .font(.title)
                                     .padding(.vertical,10)
                                     .foregroundColor(.black)
-                                Text("＄\(mu.menu.prise)元(NT)")
+                                Text("＄\(mu.prise)元(NT)")
                                     .font(.title)
                                     .padding(.bottom,10)
                                     .foregroundColor(.black)

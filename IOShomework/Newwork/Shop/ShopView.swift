@@ -63,6 +63,7 @@ struct ShopView: View {
             .navigationBarTitle(Text("選擇食材清單"),displayMode: .inline)
             
         }
+        
     }
 }
 

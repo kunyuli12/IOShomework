@@ -17,7 +17,7 @@ struct TestMune: View {
                 ForEach(MyData.Shoppings){ ms in //mu 是每次回圈時所帶的值
                     NavigationLink{
                         VStack {
-                            ProductView(image: ms.menu.ItemView, Itemname: ms.menu.name, money: ms.menu.prise, weight: ms.infrom.foodweight, place: ms.infrom.foodplace, times:ms.infrom.foodtime )
+                            ProductView(image: ms.ItemView, Itemname: ms.name, money: ms.prise, weight: ms.infrom.foodweight, place: ms.infrom.foodplace, times:ms.infrom.foodtime )
                             
                             buybuttom()
                                 .padding(.top,15)
@@ -32,16 +32,16 @@ struct TestMune: View {
                         }
                     } label:{
                         HStack{
-                            Image("\(ms.menu.ItemView)")
+                            Image("\(ms.ItemView)")
                                 .resizable()
                                 .frame(width: 110, height: 110)
                                 .cornerRadius(20)
                             VStack{
-                                Text("\(ms.menu.name)")
+                                Text("\(ms.name)")
                                     .font(.title)
                                     .padding(.vertical,10)
                                     .foregroundColor(.black)
-                                Text("＄\(ms.menu.prise)元(NT)")
+                                Text("＄\(ms.prise)元(NT)")
                                     .font(.title)
                                     .padding(.bottom,10)
                                     .foregroundColor(.black)

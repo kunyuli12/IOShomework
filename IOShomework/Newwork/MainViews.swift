@@ -13,7 +13,8 @@ struct MainViews: View {
     
     var body: some View {
         TabView{
-                ShopView().environmentObject(MyData).tabItem { Image(systemName:"cart.fill.badge.plus")
+                ShopView().environmentObject(MyData)
+                .tabItem { Image(systemName:"cart.fill.badge.plus")
                 }          
             HomeView().environmentObject(MyData).tabItem { Image(systemName:"house.fill")
                 }
