@@ -12,7 +12,7 @@ struct HealtView: View {
         NavigationView{
             VStack {
                 NavigationLink{
-                    Text("Hi")
+                    MeatAnalyze()
                 } label: {
                     HealthEnter(Titletext:"葷食")
                 }

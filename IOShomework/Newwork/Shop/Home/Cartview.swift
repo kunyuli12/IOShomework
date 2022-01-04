@@ -13,50 +13,53 @@ struct Cartview: View {
     @State var isshow = false
     
     var body: some View {
-        VStack {
-            Text("購物車")
-                .font(.title)
-            Rectangle()
-                .frame(maxWidth:.infinity)
-                .frame(height:1.5)
-            ScrollView(showsIndicators:false) {
-                HStack {
-                    Image("Broccoli")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .cornerRadius(10)
-                        .padding(.leading,20)
-                    VStack {
-                        Text("青花菜")
-                            .font(.title)
-                        Text("(50g/一份|40元)")
-                    }
-                    Spacer()
+        ZStack {
+            VStack {
+                Text("購物車")
+                    .font(.title)
+                Rectangle()
+                    .frame(maxWidth:.infinity)
+                    .frame(height:1.5)
+                ScrollView(showsIndicators:false) {
                     HStack {
-                        Text("s")
-                            .font(.title2)
-                            .frame(width: 56, height: 40)
-                            .cornerRadius(5)
-                            .background(Color("healthybuttom3"))
-                        Image(systemName: "minus.square.fill")
+                        Image("Broccoli")
                             .resizable()
-                            .frame(width: 40, height: 40)
-                            .foregroundColor(.gray)
-                            .cornerRadius(5)
-                        Image(systemName: "plus.square.fill")
-                            .resizable()
-                            .frame(width: 40, height: 40)
-                            .foregroundColor(.gray)
-                            .cornerRadius(5)
+                            .frame(width: 100, height: 100)
+                            .cornerRadius(10)
+                            .padding(.leading,20)
+                        VStack {
+                            Text("青花菜")
+                                .font(.title)
+                            Text("(50g/一份|40元)")
+                        }
+                        Spacer()
+                        HStack {
+                            Text("s")
+                                .font(.title2)
+                                .frame(width: 56, height: 40)
+                                .cornerRadius(5)
+                                .background(Color("healthybuttom3"))
+                            Image(systemName: "minus.square.fill")
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.gray)
+                                .cornerRadius(5)
+                            Image(systemName: "plus.square.fill")
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.gray)
+                                .cornerRadius(5)
+                        }
+                        Spacer()
                     }
-                    Spacer()
+                    foodmenu()
                 }
-                foodmenu()
-            }
-            Spacer()
-            BuyView()
-            Spacer()
-                .frame(height: 20)
+                Spacer()
+                BuyView()
+                Spacer()
+                    .frame(height: 20)
+            }.blur(radius: isshow ? 9 : 0)
+            CheckView().offset(x: isshow ? 0:1000)
         }
     }
     @ViewBuilder func foodmenu() -> some View{
@@ -115,23 +118,32 @@ struct Cartview: View {
                 .cornerRadius(5)
                 .padding(.trailing,10)
                 .onTapGesture {
-                    MyData.Orders.append(order(onOrder: MyData.showOrder))
-                    MyData.showOrder.removeAll()
                     isshow.toggle()
                 }
         }
 }
     @ViewBuilder func CheckView() -> some View{
         VStack{
+            Spacer()
             Text("確定結帳？")
-                .font(.title)
+                .font(.system(size: 35, weight: .heavy, design: .rounded))
+                .foregroundColor(.white)
+            Spacer()
             Text("確定")
-                .font(.title)
+                .font(.system(size: 35, weight: .heavy, design: .rounded))
+                .foregroundColor(.white)
                 .onTapGesture {
-                
+                    MyData.Orders.append(order(onOrder: MyData.showOrder))
+                    MyData.showOrder.removeAll()
                     isshow.toggle()
                 }
-        }
+                .frame(width: 200, height: 50)
+                .background(Color(.red))
+                .cornerRadius(10)
+            Spacer()
+        }.frame(width: 340, height: 200)
+            .background(Color(.gray))
+            .cornerRadius(20)
     }
 }
 

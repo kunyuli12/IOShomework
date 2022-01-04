@@ -52,17 +52,17 @@ class ShopMenu:ObservableObject {
         ]
     }
     func shoping()  {
-         Shoppings = [
-           menu(ItemView: "Broccoli", prise: "80", name: "花椰菜",infrom:foodinfrom(foodweight: "2台斤", foodplace: "台南", foodtime: "冷藏５～７天")),
-           menu(ItemView: "Cabbage", prise: "70", name: "高麗菜",infrom:foodinfrom(foodweight: "3台斤", foodplace: "台東", foodtime: "冷藏2～4天")),
-           menu(ItemView: "AlfalfaSprouts", prise: "45", name: "苜蓿芽",infrom:foodinfrom(foodweight: "1.5台斤", foodplace: "台南", foodtime: "冷藏3～6天")),
-           menu(ItemView: "Tofu", prise: "30", name: "豆腐",infrom:foodinfrom(foodweight: "2台斤", foodplace: "台東", foodtime: "冷藏6～9天")),
-           menu(ItemView: "cucumber", prise: "55", name: "小黃瓜",infrom:foodinfrom(foodweight: "2台斤", foodplace: "台中", foodtime: "冷4～5天"))
+        Shoppings = [
+            menu(ItemView: "Broccoli", prise: "80", name: "花椰菜",infrom:foodinfrom(foodweight: "2台斤", foodplace: "台南", foodtime: "冷藏５～７天")),
+            menu(ItemView: "Cabbage", prise: "70", name: "高麗菜",infrom:foodinfrom(foodweight: "3台斤", foodplace: "台東", foodtime: "冷藏2～4天")),
+            menu(ItemView: "AlfalfaSprouts", prise: "45", name: "苜蓿芽",infrom:foodinfrom(foodweight: "1.5台斤", foodplace: "台南", foodtime: "冷藏3～6天")),
+            menu(ItemView: "Tofu", prise: "30", name: "豆腐",infrom:foodinfrom(foodweight: "2台斤", foodplace: "台東", foodtime: "冷藏6～9天")),
+            menu(ItemView: "cucumber", prise: "55", name: "小黃瓜",infrom:foodinfrom(foodweight: "2台斤", foodplace: "台中", foodtime: "冷4～5天"))
         ]
-       
+        
     }
     
-   
+    
     func addOrder(value:menu){
         let Index = showOrder.firstIndex(where: { od in
             od.menu.name == value.name

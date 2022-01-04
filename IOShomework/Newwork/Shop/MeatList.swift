@@ -49,6 +49,7 @@ struct MeatList: View {
                             .background(Color(.gray))
                             .onTapGesture {
                                 MyData.addOrder(value: mu )
+                                
                             }
                         }
                     } label:{
