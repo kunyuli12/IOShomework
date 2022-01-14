@@ -9,7 +9,14 @@ import SwiftUI
 
 struct LikeList: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text("我的最愛")
+                .font(.title)
+            Rectangle()
+                .frame(maxWidth:.infinity)
+                .frame(height:1.5)
+            Spacer()
+        }
     }
 }
 

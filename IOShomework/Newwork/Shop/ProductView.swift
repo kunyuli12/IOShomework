@@ -9,9 +9,9 @@ import SwiftUI
 
 struct ProductView: View {
     
-    @State var image = ""
+    @State var image = "Rice"
     @State var Itemname = ""
-    @State var money = ""
+    @State var money:Int = 0
     @State var weight = ""
     @State var place = ""
     @State var times = ""
@@ -21,9 +21,9 @@ struct ProductView: View {
     var body: some View {
         ZStack {
             VStack {
-                Image("\(image)")
-                    .resizable()
-                    .frame(width: 200, height: 160)
+                    Image("\(image)")
+                        .resizable()
+                        .frame(width: 200, height: 160)
                     .cornerRadius(15)
                 Rectangle()
                     .frame(maxWidth:.infinity )
@@ -40,6 +40,8 @@ struct ProductView: View {
                     Text("產地:\(place)")
                         .modifier(textmod())
                     Text("保存期限:\(times)")
+                        .modifier(textmod())
+                    Text("青農資訊：")
                         .modifier(textmod())
                     HStack {
                         Text("營養資訊")
@@ -68,6 +70,7 @@ struct ProductView: View {
                 }
                 Spacer()
             }
+           
             ZStack{
             Productnews().offset(x: onoff ? 0:800)
             comeback().offset(x: onoff ? 0:800)
@@ -97,6 +100,7 @@ struct ProductView: View {
 struct ProductView_Previews: PreviewProvider {
     static var previews: some View {
         ProductView()
+
     }
 }
 

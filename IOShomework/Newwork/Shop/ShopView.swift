@@ -18,7 +18,7 @@ struct ShopView: View {
                         Rectangle()
                             .frame(width: 300, height: 120, alignment: .center)
                             .cornerRadius(15)
-                        Text("葷食清單")
+                        Text("蔬菜清單")
                             .font(.title)
                             .foregroundColor(.black)
                     }
@@ -34,27 +34,12 @@ struct ShopView: View {
                         Rectangle()
                             .frame(width: 300, height: 120, alignment: .center)
                             .cornerRadius(15)
-                        Text("素食清單")
+                        Text("水果清單")
                             .font(.title)
                             .foregroundColor(.black)
                     }
                 }
                 
-                Spacer()
-                    .frame(height: 40)
-                
-                NavigationLink{
-                    MeatList()
-                } label: {
-                    ZStack {
-                        Rectangle()
-                            .frame(width: 300, height: 120, alignment: .center)
-                            .cornerRadius(15)
-                        Text("其他清單")
-                            .font(.title)
-                            .foregroundColor(.black)
-                    }
-                }
                 
                 Spacer()
                     .frame(height: 30)

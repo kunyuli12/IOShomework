@@ -10,46 +10,14 @@ import SwiftUI
 struct buybuttom: View {
     
     @State var onoff = false
-    @State var shownumber = "0"
+    @State var shownumber = ""
     @State var numbernew = 0
     
     
     var body: some View {
-        ZStack {
-            HStack {
-                Spacer()
-                Text("購買數量")
-                    .font(.title2)
-                TextField("數量",text: $shownumber)
-                    .frame(maxWidth:.infinity )
-                    .frame( height: 40, alignment: .center)
-                    .padding(.horizontal,10)
-                    .background(Color("Colorone"))
-                    .cornerRadius(20)
-                    .padding(.leading,2)
-                    .padding(.trailing,2)
-                
-                Image(systemName: "minus.square.fill")
-                    .resizable()
-                    .frame(width: 40, height: 40)
-                    .foregroundColor(.gray)
-                    .cornerRadius(5)
-                    .onTapGesture {
-                        numbernew = numbernew-1
-                    }
-                
-                Image(systemName: "plus.square.fill")
-                    .resizable()
-                    .frame(width: 40, height: 40)
-                    .foregroundColor(.gray)
-                    .cornerRadius(5)
-                    .onTapGesture {
-                        numbernew = numbernew+1
-                    }
-                Spacer()
-            }
+        
             Text("\(numbernew)")
-        }
+        
     }
 }
 
@@ -58,3 +26,39 @@ struct buybuttom_Previews: PreviewProvider {
         buybuttom()
     }
 }
+/*
+ ZStack {
+     HStack {
+         Spacer()
+         Text("購買數量")
+             .font(.title2)
+         TextField("數量",text: $shownumber)
+             .frame(maxWidth:.infinity )
+             .frame( height: 40, alignment: .center)
+             .padding(.horizontal,10)
+             .background(Color("Colorone"))
+             .cornerRadius(20)
+             .padding(.leading,2)
+             .padding(.trailing,2)
+         
+         Image(systemName: "minus.square.fill")
+             .resizable()
+             .frame(width: 40, height: 40)
+             .foregroundColor(.gray)
+             .cornerRadius(5)
+             .onTapGesture {
+                 numbernew = numbernew-1
+             }
+         
+         Image(systemName: "plus.square.fill")
+             .resizable()
+             .frame(width: 40, height: 40)
+             .foregroundColor(.gray)
+             .cornerRadius(5)
+             .onTapGesture {
+                 numbernew = numbernew+1
+             }
+         Spacer()
+     }
+ }
+ */

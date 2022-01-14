@@ -10,13 +10,15 @@ import SwiftUI
 struct MainViews: View {
     
     @StateObject var MyData = ShopMenu()
+    @StateObject var cacu = Cacus()
     
     var body: some View {
         TabView{
                 ShopView().environmentObject(MyData)
                 .tabItem { Image(systemName:"cart.fill.badge.plus")
                 }          
-            HomeView().environmentObject(MyData).tabItem { Image(systemName:"house.fill")
+            HomeView().environmentObject(MyData)
+                .tabItem { Image(systemName:"house.fill")
                 }
             HealtView().environmentObject(MyData).tabItem { Image(systemName:"heart.text.square.fill")
             }

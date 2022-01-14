@@ -11,7 +11,7 @@ struct PurchaseHistory: View {
     
     @EnvironmentObject var MyData:ShopMenu
     @State var myoder = [
-        Oder(menu: menu(ItemView: "Broccoli", prise: "70", name: "花椰菜",infrom:foodinfrom(foodweight: "2台斤", foodplace: "台南", foodtime: "冷藏５～７天")), numbers: 1)
+        Oder(menu: menu(ItemView: "Broccoli", prise: 70, name: "花椰菜",infrom:foodinfrom(foodweight: "2台斤", foodplace: "台南", foodtime: "冷藏５～７天"),swNumber:0,like: false), numbers: 1)
     ]
     @State var showOrder = false
     
@@ -26,8 +26,13 @@ struct PurchaseHistory: View {
                         Text("History Order")
                             .font(.title)
                             .foregroundColor(Color(.gray))
-                        Text("Order\(od.id)")
-                            .foregroundColor(Color(.gray))
+                       
+                        ForEach(myoder){ my in
+                            Text("\(my.menu.prise)元")
+                                .font(.title2)
+                                .foregroundColor(Color(.gray))
+                        }
+                        
                     }.frame(width: 370, height: 100)
                         .background(Color(.yellow))
                         .cornerRadius(20)
@@ -58,7 +63,7 @@ struct PurchaseHistory: View {
                                 .cornerRadius(10)
                                 .padding(.leading,20)
                             VStack{
-                            Text("\(myod.menu.name)")
+                                Text("\(myod.menu.name)")
                                 .font(.title)
                             Text("(\(myod.menu.infrom.foodweight)/一份|\(myod.menu.prise)元)")
                             }
@@ -82,3 +87,4 @@ struct PurchaseHistory_Previews: PreviewProvider {
         PurchaseHistory().environmentObject(ShopMenu())
     }
 }
+
