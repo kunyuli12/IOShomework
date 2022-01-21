@@ -79,9 +79,8 @@ struct MeatList: View {
                                         Text("||")
                                         buybuttom(numbernew:mu.swNumber)
                                     }
-                                    Text("\(anser)")
+                                    
                                 }.padding(.top,15)
-                                
                                 Text("購買")
                                     .font(.title2)
                                     .frame(width: 100, height: 40)
@@ -89,6 +88,7 @@ struct MeatList: View {
                                     .background(Color(.gray))
                                     .onTapGesture {
                                         anser = MyData.toltolprise(prises: mu.prise, number: mu.swNumber)
+                                        numbernew = 0
                                     }
                                    
                                     

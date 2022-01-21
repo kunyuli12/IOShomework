@@ -96,6 +96,7 @@ struct Cartview: View {
                             .cornerRadius(5)
                     }.padding(.leading,15)
                     Spacer()
+                    
                 }
             }
         }
@@ -108,10 +109,15 @@ struct Cartview: View {
                     .font(.title2)
                 Text("運費：")
                     .font(.title2)
-                Text("總共：")
+                Text("總共：\(anser)")
                     .font(.title2)
             }.padding(.leading,10)
             Spacer()
+            Rectangle()
+                .frame(width: 10, height: 10)
+                .onTapGesture {
+                    anser = MyData.sumPrise(temp_orders: MyData.showOrder)//MyData.toltolprise(prises: od.menu.prise, number: od.numbers)
+                }
             Text("購買")
                 .font(.title)
                 .frame(width: 85, height: 85)
@@ -137,6 +143,7 @@ struct Cartview: View {
                     MyData.Orders.append(order(onOrder: MyData.showOrder))
                     MyData.showOrder.removeAll()
                     isshow.toggle()
+                    anser = 0
                 }
                 .frame(width: 200, height: 50)
                 .background(Color(.red))

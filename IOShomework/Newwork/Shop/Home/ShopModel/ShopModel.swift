@@ -117,6 +117,16 @@ class ShopMenu:ObservableObject {
         return anser
     }
     
+    func sumPrise(temp_orders:[Oder]) -> Int {
+        
+        var sum = 0
+        
+        for od in temp_orders {
+            sum += toltolprise(prises: od.menu.prise, number: od.numbers)
+        }
+        
+        return sum
+    }
 }
 
 class Cacus:ObservableObject{
