@@ -11,6 +11,7 @@ struct Cartview: View {
     
     @EnvironmentObject var MyData:ShopMenu
     @State var isshow = false
+    @State var anser:Int = 0
     
     var body: some View {
         ZStack {
@@ -21,7 +22,7 @@ struct Cartview: View {
                     .frame(maxWidth:.infinity)
                     .frame(height:1.5)
                 ScrollView(showsIndicators:false) {
-                    HStack {
+                  /*  HStack {
                         Image("Broccoli")
                             .resizable()
                             .frame(width: 100, height: 100)
@@ -51,7 +52,7 @@ struct Cartview: View {
                                 .cornerRadius(5)
                         }
                         Spacer()
-                    }
+                    } */
                     foodmenu()
                 }
                 Spacer()

@@ -44,7 +44,7 @@ struct MeatList: View {
                     NavigationLink{
                         ZStack{
                             VStack {
-                                ProductView(image: mu.ItemView, Itemname: mu.name, money: mu.prise, weight: mu.infrom.foodweight, place: mu.infrom.foodplace, times: mu.infrom.foodtime)
+                                ProductView(image: mu.ItemView, Itemname: mu.name, money: mu.prise, weight: mu.infrom.foodweight, place: mu.infrom.supply, times: mu.infrom.foodtime)
                                 ZStack{
                                     HStack {
                                         Spacer()
@@ -79,13 +79,17 @@ struct MeatList: View {
                                         Text("||")
                                         buybuttom(numbernew:mu.swNumber)
                                     }
+                                    Text("\(anser)")
                                 }.padding(.top,15)
                                 
                                 Text("購買")
                                     .font(.title2)
-                                    .frame(width: 100, height: 50)
+                                    .frame(width: 100, height: 40)
                                     .cornerRadius(10)
                                     .background(Color(.gray))
+                                    .onTapGesture {
+                                        anser = MyData.toltolprise(prises: mu.prise, number: mu.swNumber)
+                                    }
                                    
                                     
                             }

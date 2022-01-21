@@ -37,7 +37,7 @@ struct ProductView: View {
                         .modifier(textmod())
                     Text("重量:\(weight)")
                         .modifier(textmod())
-                    Text("產地:\(place)")
+                    Text("生產者:\(place)")
                         .modifier(textmod())
                     Text("保存期限:\(times)")
                         .modifier(textmod())

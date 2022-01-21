@@ -11,9 +11,10 @@ struct PurchaseHistory: View {
     
     @EnvironmentObject var MyData:ShopMenu
     @State var myoder = [
-        Oder(menu: menu(ItemView: "Broccoli", prise: 70, name: "花椰菜",infrom:foodinfrom(foodweight: "2台斤", foodplace: "台南", foodtime: "冷藏５～７天"),swNumber:0,like: false), numbers: 1)
+        Oder(menu: menu(ItemView: "Broccoli", prise: 70, name: "花椰菜",infrom:foodinfrom(foodweight: "2台斤", supply: "台南", foodtime: "冷藏５～７天"),swNumber:0,like: false), numbers: 1)
     ]
     @State var showOrder = false
+    @State var indexId = 0
     
     var body: some View {
         VStack {
@@ -21,25 +22,28 @@ struct PurchaseHistory: View {
                 .font(.largeTitle)
             Spacer()
             ScrollView(showsIndicators:false) {
-                ForEach(MyData.Orders){ od in
-                    VStack{
-                        Text("History Order")
-                            .font(.title)
-                            .foregroundColor(Color(.gray))
-                       
-                        ForEach(myoder){ my in
-                            Text("\(my.menu.prise)元")
-                                .font(.title2)
+                ForEach(0..<MyData.Orders.count,id:\.self){ od in
+                    HStack {
+                        Text("\(od)")
+                        VStack{
+                            Text("History Order")
+                                .font(.title)
                                 .foregroundColor(Color(.gray))
+                           
+                            ForEach(myoder){ my in
+                                Text("\(my.menu.prise)元")
+                                    .font(.title2)
+                                    .foregroundColor(Color(.gray))
+                            }
+                            
                         }
-                        
                     }.frame(width: 370, height: 100)
                         .background(Color(.yellow))
                         .cornerRadius(20)
                         .onTapGesture {
                             showOrder.toggle()
-                            myoder = od.onOrder
-                        }
+                            myoder = MyData.Orders[od].onOrder
+                    }
                 }
             }
         }.blur(radius: showOrder ? 9 : 0)
