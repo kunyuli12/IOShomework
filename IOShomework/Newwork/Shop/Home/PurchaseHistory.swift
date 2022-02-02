@@ -16,6 +16,7 @@ struct PurchaseHistory: View {
     @State var showOrder = false
     @State var indexId = 0
     
+    
     var body: some View {
         VStack {
             Text("Order History")
@@ -25,8 +26,10 @@ struct PurchaseHistory: View {
                 ForEach(0..<MyData.Orders.count,id:\.self){ od in
                     HStack {
                         Text("\(od)")
+                            .offset(x:-40)
+                            .font(.title)
                         VStack{
-                            Text("History Order")
+                            Text("歷史紀錄")
                                 .font(.title)
                                 .foregroundColor(Color(.gray))
                            
@@ -38,7 +41,7 @@ struct PurchaseHistory: View {
                             
                         }
                     }.frame(width: 370, height: 100)
-                        .background(Color(.yellow))
+                        .background(Color("yellowlight"))
                         .cornerRadius(20)
                         .onTapGesture {
                             showOrder.toggle()

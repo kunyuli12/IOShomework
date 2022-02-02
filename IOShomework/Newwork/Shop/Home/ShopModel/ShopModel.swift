@@ -44,6 +44,7 @@ class ShopMenu:ObservableObject {
     @Published var en_number = 0
     @Published var Shoppings:[menu] = [menu]() //要回傳的，所以要先去宣告一個職
     @Published var showOrder = [Oder]()
+    @Published var likeOrder = [Oder]()
     @Published var Orders = [order]()
     @Published var onoffs:Bool =  false
     
@@ -71,16 +72,15 @@ class ShopMenu:ObservableObject {
         Shoppings[index].like = Lk
     }
     
-    func addOrder(value:menu ){
+    func addOrder(value:menu,quanty:Int ){
         let Index = showOrder.firstIndex(where: { od in
             od.menu.name == value.name
         })
         if (Index != nil) {
-            showOrder[Index!].numbers += 1
-            showOrder[Index!].menu.swNumber += 1
+            showOrder[Index!].numbers += quanty
             
         }else{
-            showOrder.append(Oder(menu: value, numbers: 1))
+            showOrder.append(Oder(menu: value, numbers: quanty))
         }
     }
     func lowerOrder(value:menu ){
@@ -88,30 +88,27 @@ class ShopMenu:ObservableObject {
             od.menu.name == value.name
         })
         if (Index != nil) {
-            showOrder[Index!].numbers -= 1
+            if showOrder[Index!].numbers > 1 {
+                showOrder[Index!].numbers -= 1
+            }else{
+                showOrder.removeAll()
+            }
             
         }else{
             showOrder.append(Oder(menu: value, numbers: 1))
         }
     }
-    
-    func addshowOrder(value:menu ){
-        let Index = Shoppings.firstIndex(where: { od in
-            od.name == value.name
+    func addlike(value:menu,quanty:Int ){
+        let Index = likeOrder.firstIndex(where: { od in
+            od.menu.like == value.like
         })
         if (Index != nil) {
-            Shoppings[Index!].swNumber += 1
+            likeOrder.removeAll()
+            
+        }else{
+            likeOrder.append(Oder(menu: value, numbers: quanty))
         }
     }
-    func lowershowOrder(value:menu ){
-        let Index = Shoppings.firstIndex(where: { od in
-            od.name == value.name
-        })
-        if (Index != nil) {
-            Shoppings[Index!].swNumber -= 1
-        }
-    }
-    
     func toltolprise(prises:Int ,number:Int ) -> Int {
         let anser = prises*number
         return anser
@@ -163,6 +160,23 @@ class Cacus:ObservableObject{
      showOrder.append(order(order: value, qauntity: 1))
      }
  }
+ func addshowOrder(value:menu ){
+     let Index = Shoppings.firstIndex(where: { od in
+         od.name == value.name
+     })
+     if (Index != nil) {
+         Shoppings[Index!].swNumber += 1
+     }
+ }
+ func lowershowOrder(value:menu ){
+     let Index = Shoppings.firstIndex(where: { od in
+         od.name == value.name
+     })
+     if (Index != nil) {
+         Shoppings[Index!].swNumber -= 1
+     }
+ }
+
 */
 
 

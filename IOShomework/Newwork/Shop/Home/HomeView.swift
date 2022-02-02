@@ -9,6 +9,9 @@ import SwiftUI
 
 struct HomeView: View {
     
+    @EnvironmentObject var MyData:ShopMenu
+    @State var anser:Int = 0
+    
     var body: some View {
             NavigationView{
                     VStack {

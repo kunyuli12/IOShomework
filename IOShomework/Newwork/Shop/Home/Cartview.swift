@@ -11,7 +11,7 @@ struct Cartview: View {
     
     @EnvironmentObject var MyData:ShopMenu
     @State var isshow = false
-    @State var anser:Int = 0
+    @State var anseres:Int = 0
     
     var body: some View {
         ZStack {
@@ -89,11 +89,19 @@ struct Cartview: View {
                             .frame(width: 40, height: 40)
                             .foregroundColor(.gray)
                             .cornerRadius(5)
+                            .onTapGesture {
+                                MyData.lowerOrder(value: od.menu)
+                                anseres = MyData.sumPrise(temp_orders: MyData.showOrder)
+                            }
                         Image(systemName: "plus.square.fill")
                             .resizable()
                             .frame(width: 40, height: 40)
                             .foregroundColor(.gray)
                             .cornerRadius(5)
+                            .onTapGesture {
+                                MyData.addOrder(value: od.menu,quanty: 1)
+                                anseres = MyData.sumPrise(temp_orders: MyData.showOrder)
+                            }
                     }.padding(.leading,15)
                     Spacer()
                     
@@ -105,18 +113,21 @@ struct Cartview: View {
     @ViewBuilder func BuyView() -> some View{
         HStack {
             VStack{
-                Text("小計：")
+                Text("小計：  \(anseres)")
                     .font(.title2)
-                Text("運費：")
+                Text("運費：  0")
                     .font(.title2)
-                Text("總共：\(anser)")
+                Text("總共：  \(anseres)")
                     .font(.title2)
             }.padding(.leading,10)
             Spacer()
-            Rectangle()
-                .frame(width: 10, height: 10)
+            Text("prise")
+                .font(.title)
+                .frame(width: 85, height: 85)
+                .background(Color(.gray))
+                .cornerRadius(5)
                 .onTapGesture {
-                    anser = MyData.sumPrise(temp_orders: MyData.showOrder)//MyData.toltolprise(prises: od.menu.prise, number: od.numbers)
+                    anseres = MyData.sumPrise(temp_orders: MyData.showOrder)//MyData.toltolprise(prises: od.menu.prise, number: od.numbers)
                 }
             Text("購買")
                 .font(.title)
@@ -136,18 +147,30 @@ struct Cartview: View {
                 .font(.system(size: 35, weight: .heavy, design: .rounded))
                 .foregroundColor(.white)
             Spacer()
-            Text("確定")
-                .font(.system(size: 35, weight: .heavy, design: .rounded))
-                .foregroundColor(.white)
-                .onTapGesture {
-                    MyData.Orders.append(order(onOrder: MyData.showOrder))
-                    MyData.showOrder.removeAll()
-                    isshow.toggle()
-                    anser = 0
-                }
-                .frame(width: 200, height: 50)
-                .background(Color(.red))
-                .cornerRadius(10)
+            HStack {
+                Text("取消")
+                    .font(.system(size: 35, weight: .heavy, design: .rounded))
+                    .frame(width: 90, height: 50)
+                    .background(Color(.red))
+                    .cornerRadius(10)
+                    .foregroundColor(.white)
+                    .onTapGesture {
+                        isshow.toggle()
+                    }
+                Text("確定")
+                    .font(.system(size: 35, weight: .heavy, design: .rounded))
+                    .foregroundColor(.white)
+                    .onTapGesture {
+                        MyData.Orders.append(order(onOrder: MyData.showOrder))
+                        MyData.showOrder.removeAll()
+                        isshow.toggle()
+                        anseres = 0
+                    }
+                    .frame(width: 90, height: 50)
+                    .background(Color(.red))
+                    .cornerRadius(10)
+               
+            }
             Spacer()
         }.frame(width: 340, height: 200)
             .background(Color(.gray))

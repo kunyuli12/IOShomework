@@ -23,7 +23,6 @@ struct ShopView: View {
                             .foregroundColor(.black)
                     }
                 }
-                
                 Spacer()
                     .frame(height: 40)
                 
@@ -39,14 +38,9 @@ struct ShopView: View {
                             .foregroundColor(.black)
                     }
                 }
-                
-                
                 Spacer()
                     .frame(height: 30)
-                
-            }
-            .navigationBarTitle(Text("選擇食材清單"),displayMode: .inline)
-            
+            }.navigationBarTitle(Text("選擇食材清單"),displayMode: .inline)
         }
         
     }

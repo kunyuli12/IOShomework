@@ -9,24 +9,22 @@ import SwiftUI
 
 struct MeatList: View {
     
-    @State var textview = " "
+    @State var textview :String = ""
     @EnvironmentObject var MyData:ShopMenu
     @EnvironmentObject var cacu:Cacus
     @State var onoff = false
     @State var shownumber = ""
     @State var numbernew:Int = 0
     @State var anser:Int = 0
+    @State var chock = false
+    @State var chock_again = false
     
     var body: some View {
         VStack{
             HStack {
-                TextField("搜尋",text: $textview)
-                    .frame(maxWidth:.infinity )
-                    .frame( height: 50, alignment: .center)
-                    .background(Color("Colorone"))
-                    .cornerRadius(20)
-                    .padding(.leading,8)
-                    .padding(.trailing,8)
+                TextField("搜尋...",text: $textview)
+                    .padding(8)
+                    .textFieldStyle(.roundedBorder)
                 Button{
                     
                 } label: {
@@ -42,72 +40,128 @@ struct MeatList: View {
             ScrollView(showsIndicators:false) {
                 ForEach(MyData.Shoppings){ mu in //mu 是每次回圈時所帶的值
                     NavigationLink{
-                        ZStack{
-                            VStack {
-                                ProductView(image: mu.ItemView, Itemname: mu.name, money: mu.prise, weight: mu.infrom.foodweight, place: mu.infrom.supply, times: mu.infrom.foodtime)
-                                ZStack{
-                                    HStack {
-                                        Spacer()
-                                        Text("購買數量")
-                                            .font(.title2)
-                                        TextField("數量",text: $shownumber)
-                                            .frame(maxWidth:.infinity )
-                                            .frame( height: 40, alignment: .center)
-                                            .padding(.horizontal,10)
-                                            .background(Color("Colorone"))
-                                            .cornerRadius(20)
-                                            .padding(.leading,2)
-                                            .padding(.trailing,2)
-                                        
-                                        ButtonImage(Imagename:"minus.square.fill" )
-                                            .onTapGesture {
-                                                MyData.lowerOrder(value: mu)
-                                                MyData.lowershowOrder(value: mu)
-                                                numbernew -= 1
-                                            }
-                                        
-                                        ButtonImage(Imagename:"plus.square.fill")
-                                            .onTapGesture {
-                                                MyData.addOrder(value: mu )
-                                                MyData.addshowOrder(value: mu)
-                                                numbernew += 1
-                                            };
-                                        Spacer()
-                                    }
-                                    HStack {
-                                        Text("\(numbernew)")
-                                        Text("||")
-                                        buybuttom(numbernew:mu.swNumber)
-                                    }
-                                    
-                                }.padding(.top,15)
-                                Text("購買")
-                                    .font(.title2)
-                                    .frame(width: 100, height: 40)
-                                    .cornerRadius(10)
-                                    .background(Color(.gray))
-                                    .onTapGesture {
-                                        anser = MyData.toltolprise(prises: mu.prise, number: mu.swNumber)
-                                        numbernew = 0
-                                    }
-                                   
-                                    
-                            }
-                            VStack{
-                                Spacer()
-                                    .frame (height:110)
-                                HStack {
-                                    Spacer()
-                                    Image(systemName: "heart.circle.fill")
-                                        .resizable()
-                                        .frame(width: 50, height: 50)
-                                        .foregroundColor(mu.like ? Color("lightred") : Color(.gray))
-                                        .padding(.trailing,20)
+                        VStack {
+                            ZStack{
+                                VStack {
+                                    ProductView(image: mu.ItemView, Itemname: mu.name, money: mu.prise, weight: mu.infrom.foodweight, place: mu.infrom.supply, times: mu.infrom.foodtime)
+                                    ZStack{
+                                        HStack {
+                                            Spacer()
+                                            Text("購買數量")
+                                                .font(.title2)
+                                            TextField("",text: $shownumber)
+                                                .frame(maxWidth:.infinity )
+                                                .frame( height: 40, alignment: .center)
+                                                .padding(.horizontal,10)
+                                                .background(Color("Colorone"))
+                                                .cornerRadius(20)
+                                                .padding(.leading,2)
+                                                .padding(.trailing,2)
+                                            
+                                            ButtonImage(Imagename:"minus.square.fill" )
+                                                .onTapGesture {
+                                                    if  numbernew > 0 {
+                                                        numbernew -= 1
+                                                    }
+                                                }
+                                            
+                                            ButtonImage(Imagename:"plus.square.fill")
+                                                .onTapGesture {
+                                                    numbernew += 1
+                                                };
+                                            Spacer()
+                                        }
+                                        HStack {
+                                            Text("\(numbernew)")
+                                        }
+                                    }.padding(.top,15)
+                                    Text("購買")
+                                        .font(.title2)
+                                        .frame(width: 100, height: 50)
+                                        .cornerRadius(10)
+                                        .background(Color(.gray))
+                                        .cornerRadius(5)
                                         .onTapGesture {
-                                            MyData.mark(id: mu.id, Lk:mu.like ? false : true)
+                                            if numbernew > 0 {
+                                                chock.toggle() }
+                                            else{
+                                                chock_again.toggle()
+                                            }
                                         }
                                 }
-                                Spacer()
+                                VStack{
+                                    Spacer()
+                                        .frame (height:110)
+                                    HStack {
+                                        Spacer()
+                                        Image(systemName: "heart.circle.fill")
+                                            .resizable()
+                                            .frame(width: 50, height: 50)
+                                            .foregroundColor(mu.like ? Color("lightred") : Color(.gray))
+                                            .padding(.trailing,20)
+                                            .onTapGesture {
+                                                MyData.mark(id: mu.id, Lk:mu.like ? false : true)
+                                                MyData.addlike(value: mu, quanty: numbernew)
+                                                
+                                            }
+                                    }
+                                    Spacer()
+                                }
+                                VStack{
+                                    Spacer()
+                                    Text("確定購買？")
+                                        .font(.system(size: 35, weight: .heavy, design: .rounded))
+                                        .foregroundColor(.white)
+                                    Spacer()
+                                    HStack {
+                                        Text("取消")
+                                            .font(.system(size: 35, weight: .heavy, design: .rounded))
+                                            .foregroundColor(.white)
+                                            .frame(width: 100, height: 50)
+                                            .background(Color(.red))
+                                            .cornerRadius(10)
+                                            .onTapGesture {
+                                                chock.toggle()
+                                        }
+
+                                        Text("確定")
+                                            .font(.system(size: 35, weight: .heavy, design: .rounded))
+                                            .foregroundColor(.white)
+                                            .frame(width: 100, height: 50)
+                                            .background(Color(.red))
+                                            .cornerRadius(10)
+                                            .onTapGesture {
+                                                MyData.addOrder(value: mu, quanty: numbernew)
+                                                numbernew = 0
+                                                chock.toggle()
+                                        }
+                                    }
+                                    Spacer()
+                                }.frame(width: 340, height: 200)
+                                    .background(Color(.gray))
+                                    .cornerRadius(20)
+                                    .offset(x:chock ? 0:1000)
+                                VStack{
+                                    Spacer()
+                                    Text("請填入購買的數量")
+                                        .font(.system(size: 35, weight: .heavy, design: .rounded))
+                                        .foregroundColor(.white)
+                                    Spacer()
+
+                                        Text("ＯＫ ")
+                                            .font(.system(size: 35, weight: .heavy, design: .rounded))
+                                            .foregroundColor(.white)
+                                            .frame(width: 100, height: 50)
+                                            .background(Color(.red))
+                                            .cornerRadius(10)
+                                            .onTapGesture {
+                                                chock_again.toggle()
+                                    }
+                                    Spacer()
+                                }.frame(width: 340, height: 200)
+                                    .background(Color(.gray))
+                                    .cornerRadius(20)
+                                    .offset(x:chock_again ? 0:1000)
                             }
                         }
                     } label:{
