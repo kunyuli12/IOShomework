@@ -10,6 +10,17 @@ import SwiftUI
 struct HealtView: View {
     
     @EnvironmentObject var AgeViews:VGinform
+    @State var quanty_B:Int = 0
+    @State var quanty_G:Int = 0
+    @State var isAddTitle = " "
+    @State var isLowTitle = " "
+    @State var anserVGB:Float = 0.0
+    @State var anserFUB:Float = 0.0
+    @State var anserVGG:Float = 0.0
+    @State var anserFUG:Float = 0.0
+    @State var anserVG:Float = 0.0
+    @State var anserFU:Float = 0.0
+    
     
     var body: some View {
         NavigationView{
@@ -20,30 +31,15 @@ struct HealtView: View {
                     Text("家庭人數計算")
                         .font(.system(size: 30))
                     TabView{
-                        ForEach(AgeViews.AGEbox){ ag in
-                            HStack {
-                                VStack(alignment: .leading,spacing: 15){
-                                    Text("\(ag.sex)")
-                                        .font(.system(size: 30, weight: .heavy, design: .rounded))
-                                     AgeView(Agelimits: ag.AGEname.year2_6, AgeNumber:ag.AGEnumber.year2_6)
-                                    AgeView(Agelimits: ag.AGEname.year7_12, AgeNumber:ag.AGEnumber.year7_12)
-                                    AgeView(Agelimits: ag.AGEname.year13_18, AgeNumber:ag.AGEnumber.year13_18)
-                                    AgeView(Agelimits: ag.AGEname.year19_30, AgeNumber:ag.AGEnumber.year19_30)
-                                    AgeView(Agelimits: ag.AGEname.year31_50, AgeNumber:ag.AGEnumber.year31_50)
-                                    AgeView(Agelimits: ag.AGEname.year51_70, AgeNumber:ag.AGEnumber.year51_70)
-                                    AgeView(Agelimits: ag.AGEname.year71, AgeNumber:ag.AGEnumber.year71)
-                                    Spacer().frame(width:200)
-                                }
-                                Spacer()
-                            }.frame(width: 280, height: 450)
-                        }
+                        boyview()
+                        girlview()
                     }.tabViewStyle(PageTabViewStyle())
                     Spacer()
                 }.frame(width: 320, height: 520)
                     .background(Color("確定Color"))
                     .cornerRadius(15)
                 NavigationLink{
-                    resultview()
+                    resultview(VGnumber: anserVG, Friutnumber: anserFU)
                 } label: {
                     HStack{
                         Text("確定")
@@ -58,6 +54,117 @@ struct HealtView: View {
             }.navigationBarTitle(Text("蔬果防疫箱"))
         }
     }
+    @ViewBuilder func boyview() -> some View{
+        HStack {
+            VStack(alignment: .leading,spacing: 15){
+                Text("MAN")
+                    .font(.system(size: 30, weight: .heavy, design: .rounded))
+                ForEach(AgeViews.AGEbox_B){ ags in
+                    VStack(alignment: .leading,spacing: 15){
+                        HStack {
+                            AgeView(Agelimits: ags.AGEname)
+                            Text("\(String(format: "%.0f", ags.AGEnumber))人")
+                                .font(.title2)
+                            Spacer()
+                            Image(systemName: "minus.circle.fill")
+                                .resizable()
+                                .frame(width: 25, height: 25 )
+                                .foregroundColor(isLowTitle == ags.AGEname ? Color.red : Color.blue)
+                                .onTapGesture {
+                                    AgeViews.LowBoy(value: ags, quanty: 1)
+                                    anserVGB = AgeViews.VGDemandB(tempBoy: AgeViews.AGEbox_B)
+                                    anserFUB = AgeViews.FriutDemandB(tempBoy: AgeViews.AGEbox_B)
+                                    anserVG = anserVGB + anserVGG
+                                    anserFU = anserFUB + anserFUG
+                                    withAnimation(.easeInOut) {
+                                        isLowTitle = ags.AGEname
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            isLowTitle = ""
+                                        }
+                                    }
+                                }
+                            Image(systemName: "plus.circle.fill")
+                                .resizable()
+                                .frame(width: 25, height: 25 )
+                                .foregroundColor(isAddTitle == ags.AGEname ? Color.red : Color.blue)
+                                .onTapGesture {
+                                    AgeViews.AddBoy(value: ags,quanty: 1)
+                                    anserVGB = AgeViews.VGDemandB(tempBoy: AgeViews.AGEbox_B)
+                                    anserFUB = AgeViews.FriutDemandB(tempBoy: AgeViews.AGEbox_B)
+                                    anserVG = anserVGB + anserVGG
+                                    anserFU = anserFUB + anserFUG
+                                    withAnimation(.easeInOut) {
+                                        isAddTitle = ags.AGEname
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            isAddTitle = ""
+                                        }
+                                    }
+
+                                }
+                        }
+                    }
+                }
+                Spacer().frame(width:200)
+            }
+            Spacer()
+        }.frame(width: 280, height: 450)
+    }
+    @ViewBuilder func girlview() -> some View{
+        HStack {
+            VStack(alignment: .leading,spacing: 15){
+                Text("WOMAN")
+                    .font(.system(size: 30, weight: .heavy, design: .rounded))
+                ForEach(AgeViews.AGEbox_G){ ags in
+                    VStack(alignment: .leading,spacing: 15){
+                        HStack {
+                            AgeView(Agelimits: ags.AGEname)
+                            Text("\(String(format: "%.0f", ags.AGEnumber))人")
+                                .font(.title2)
+                            Spacer()
+                            Image(systemName: "minus.circle.fill")
+                                .resizable()
+                                .frame(width: 25, height: 25 )
+                                .foregroundColor(isLowTitle == ags.AGEname ? Color.red : Color.blue)
+                                .onTapGesture {
+                                    AgeViews.LowGirl(value: ags, quanty: 1)
+                                    anserVGG = AgeViews.VGDemandG(tempGirl: AgeViews.AGEbox_G)
+                                    anserFUG = AgeViews.FriutDemandG(tempGirl: AgeViews.AGEbox_G)
+                                    anserVG = anserVGB + anserVGG
+                                    anserFU = anserFUB + anserFUG
+                                    withAnimation(.easeInOut) {
+                                        isLowTitle = ags.AGEname
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            isLowTitle = ""
+                                        }
+                                    }
+
+                                }
+                            Image(systemName: "plus.circle.fill")
+                                .resizable()
+                                .frame(width: 25, height: 25 )
+                                .foregroundColor(isAddTitle == ags.AGEname ? Color.red : Color.blue)
+                                .onTapGesture {
+                                    AgeViews.AddGirl(value: ags, quanty: 1)
+                                    anserVGG = AgeViews.VGDemandG(tempGirl: AgeViews.AGEbox_G)
+                                    anserFUG = AgeViews.FriutDemandG(tempGirl: AgeViews.AGEbox_G)
+                                    anserVG = anserVGB + anserVGG
+                                    anserFU = anserFUB + anserFUG
+                                    withAnimation(.easeInOut) {
+                                        isAddTitle = ags.AGEname
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            isAddTitle = ""
+                                        }
+                                    }
+
+                                }
+                        }
+                    }
+                }
+                Spacer().frame(width:200)
+            }
+            Spacer()
+        }.frame(width: 280, height: 450)
+    }
 }
 
 struct HealtView_Previews: PreviewProvider {
@@ -67,59 +174,10 @@ struct HealtView_Previews: PreviewProvider {
 }
 
 
-struct resultview: View {
-    var body: some View {
-        VStack {
-            Text("建議購買數量")
-                .font(.largeTitle)
-            VStack {
-                Text("蔬菜:OO份")
-                    .font(.title)
-                    .padding(4)
-                Rectangle()
-                    .frame(maxWidth:.infinity)
-                    .frame(height: 1)
-                Spacer()
-                Text("水果:OO份")
-                    .font(.title)
-                Rectangle()
-                    .frame(maxWidth:.infinity)
-                    .frame(height: 1)
-                Spacer()
-                
-            }.frame(width: 380, height: 540)
-                .background(Color("確定Color"))
-            .cornerRadius(20)
-            HStack {
-                NavigationLink{
-                    BoxView()
-                } label: {
-                    Text("去購買")
-                        .font(.title2)
-                        .frame(width: 100, height: 50)
-                        .background(Color(.gray))
-                        .cornerRadius(5)
-                        .padding(.horizontal,10)
-                        .foregroundColor(.white)
-                }
-                Text("確定購買")
-                    .font(.title2)
-                    .frame(width: 100, height: 50)
-                    .background(Color(.gray))
-                    .cornerRadius(5)
-                    .padding(.horizontal,10)
-                    .foregroundColor(.white)
-                
-            }
-            Spacer()
-        }
-    }
-}
 
 struct AgeView: View {
     
     @State var Agelimits = " "
-    @State var AgeNumber:Int
     
     var body: some View {
         HStack{
@@ -128,8 +186,6 @@ struct AgeView: View {
             Text(Agelimits)
                 .font(.title2)
             Text(":")
-                .font(.title2)
-            Text("\(AgeNumber)人")
                 .font(.title2)
         }
         .padding(5)

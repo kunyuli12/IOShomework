@@ -8,64 +8,129 @@
 import Foundation
 
 
-struct AgeModel:Identifiable,Hashable,Codable {
+struct AgeModel_B:Identifiable,Hashable,Codable {
     var id = UUID().uuidString
-    var sex:String
-    var AGEname:AgeName
-    var AGEnumber:AgeNumbers
+    var AGEname:String
+    var AGEnumber:Float
+    var NeedVG:Float
+    var NeedFurit:Float
 }
-struct AgeName:Identifiable,Hashable,Codable {
+struct AgeModel_G:Identifiable,Hashable,Codable {
     var id = UUID().uuidString
-    var year2_6:String
-    var year7_12:String
-    var year13_18:String
-    var year19_30:String
-    var year31_50:String
-    var year51_70:String
-    var year71:String
+    var AGEname:String
+    var AGEnumber:Float
+    var NeedVG:Float
+    var NeedFurit:Float
 }
-struct AgeNumbers:Identifiable,Hashable,Codable {
-    var id = UUID().uuidString
-    var year2_6:Int
-    var year7_12:Int
-    var year13_18:Int
-    var year19_30:Int
-    var year31_50:Int
-    var year51_70:Int
-    var year71:Int
-}
-
-
 class VGinform:ObservableObject {
-    @Published var AGEbox:[AgeModel] = [AgeModel]()
+    @Published var AGEbox_B:[AgeModel_B] = [AgeModel_B]()
+    @Published var AGEbox_G:[AgeModel_G] = [AgeModel_G]()
     
     init(){
-        Sexboc()
+        SexboxB()
+        SexboxG()
     }
-    
-    func Sexboc() {
-        AGEbox = [
-            AgeModel(sex: "MAN", AGEname: AgeName(year2_6: "2~6", year7_12: "7~12", year13_18: "13~18", year19_30: "19~30", year31_50: "31~50", year51_70: "51~70", year71: "71以上"), AGEnumber: AgeNumbers(year2_6: 0, year7_12: 0, year13_18: 0, year19_30: 0, year31_50: 0, year51_70: 0, year71: 0)),
-            AgeModel(sex: "WOMAN", AGEname: AgeName(year2_6: "2~6", year7_12: "7~12", year13_18: "13~18", year19_30: "19~30", year31_50: "31~50", year51_70: "51~70", year71: "71以上"), AGEnumber: AgeNumbers(year2_6: 0, year7_12: 0, year13_18: 0, year19_30: 0, year31_50: 0, year51_70: 0, year71: 0))
+    func SexboxB() {
+        AGEbox_B = [
+            AgeModel_B(AGEname: "2~6", AGEnumber: 0,NeedVG: 3,NeedFurit: 2),
+            AgeModel_B(AGEname: "7~12", AGEnumber: 0,NeedVG: 4,NeedFurit: 3),
+            AgeModel_B(AGEname: "13~18", AGEnumber: 0,NeedVG: 5,NeedFurit: 4),
+            AgeModel_B(AGEname: "19~30", AGEnumber: 0,NeedVG: 5,NeedFurit: 4),
+            AgeModel_B(AGEname: "31~50", AGEnumber: 0,NeedVG: 5,NeedFurit: 4),
+            AgeModel_B(AGEname: "51~70", AGEnumber: 0,NeedVG: 4,NeedFurit: 3.5),
+            AgeModel_B(AGEname: "71以上", AGEnumber: 0,NeedVG: 3,NeedFurit: 2)
+        ]
+    }
+    func SexboxG() {
+        AGEbox_G = [
+            AgeModel_G(AGEname: "2~6", AGEnumber: 0,NeedVG: 3,NeedFurit: 2),
+            AgeModel_G(AGEname: "7~12", AGEnumber: 0,NeedVG: 4,NeedFurit: 3),
+            AgeModel_G(AGEname: "13~18", AGEnumber: 0,NeedVG: 4,NeedFurit: 3),
+            AgeModel_G(AGEname: "19~30", AGEnumber: 0,NeedVG: 4,NeedFurit: 3),
+            AgeModel_G(AGEname: "31~50", AGEnumber: 0,NeedVG: 4,NeedFurit: 3),
+            AgeModel_G(AGEname: "51~70", AGEnumber: 0,NeedVG: 3,NeedFurit: 2),
+            AgeModel_G(AGEname: "71以上", AGEnumber: 0,NeedVG: 3,NeedFurit: 2)
         ]
     }
     
-    func cacu_VG3Fruit2(VG_qauntity:Float,Fruit_qauntity:Float) -> Float {
-        let anser = (VG_qauntity * 3) + (Fruit_qauntity * 2)
+    func AddBoy (value:AgeModel_B,quanty:Float ){
+        let Index = AGEbox_B.firstIndex(where: { ad in
+            ad.AGEname == value.AGEname
+        })
+        if (Index != nil) {
+            AGEbox_B[Index!].AGEnumber += quanty
+        }
+    }
+    func LowBoy (value:AgeModel_B,quanty:Float ){
+        let Index = AGEbox_B.firstIndex(where: { ad in
+            ad.AGEname == value.AGEname
+        })
+        if (Index != nil) {
+            if  AGEbox_B[Index!].AGEnumber > 0 {
+            AGEbox_B[Index!].AGEnumber -= quanty
+            }
+        }
+    }
+    func AddGirl (value:AgeModel_G,quanty:Float ){
+        let Index = AGEbox_G.firstIndex(where: { ad in
+            ad.AGEname == value.AGEname
+        })
+        if (Index != nil) {
+            AGEbox_G[Index!].AGEnumber += quanty
+        }
+    }
+    func LowGirl (value:AgeModel_G,quanty:Float ){
+        let Index = AGEbox_G.firstIndex(where: { ad in
+            ad.AGEname == value.AGEname
+        })
+        if (Index != nil) {
+            if  AGEbox_G[Index!].AGEnumber > 0 {
+            AGEbox_G[Index!].AGEnumber -= quanty
+            }
+        }
+    }
+
+    func FinallyQuanty(quanty:Float ,need:Float ) -> Float {
+        let anser = quanty * need
         return anser
-    }//2~6歲的小孩和50~70歲的女性與71歲以上的長者
+    }
     
-    func cacu_VG4Fruit3(VG_qauntity:Float,Fruit_qauntity:Float) -> Float{
-        let anser = (VG_qauntity * 4) + (Fruit_qauntity * 3)
-        return anser
-    }//7~12歲和13~50歲的女性
-    
-    func cacu_VG5Fruit4(VG_qauntity:Float,Fruit_qauntity:Float) -> Float{
-        let anser = (VG_qauntity * 5) + (Fruit_qauntity * 4)
-        return anser
-    }//13~50歲的男性
-    func cacu_VG4Fruit35(VG_qauntity:Float,Fruit_qauntity:Float) -> Float{
-        let anser = (VG_qauntity * 4) + (Fruit_qauntity * 3.5)
-        return anser
-    }//51~70歲的男性
+    func VGDemandB(tempBoy:[AgeModel_B]) -> Float {
+        
+        var sum:Float = 0.0
+        
+        for de in tempBoy {
+                sum += FinallyQuanty(quanty: de.AGEnumber, need: de.NeedVG)
+            
+        }
+        return sum
+    }//計算總共需要的蔬菜量
+    func VGDemandG(tempGirl:[AgeModel_G]) -> Float {
+        
+        var sum:Float = 0.0
+        
+        for des in tempGirl {
+                sum += FinallyQuanty(quanty: des.AGEnumber, need: des.NeedVG)
+            
+        }
+        return sum
+    }//計算總共需要的蔬菜量
+  func FriutDemandB(tempBoy:[AgeModel_B]) -> Float {
+      
+      var sum:Float = 0.0
+      
+      for de in tempBoy {
+              sum += FinallyQuanty(quanty: de.AGEnumber, need: de.NeedFurit)
+      }
+      return sum
+  }//計算總共需要的水果量
+    func FriutDemandG(tempGirl:[AgeModel_G]) -> Float {
+        
+        var sum:Float = 0.0
+        
+            for des in tempGirl{
+                sum += FinallyQuanty(quanty: des.AGEnumber, need: des.NeedFurit)
+            }
+        return sum
+    }//計算總共需要的水果量
 }
