@@ -64,7 +64,6 @@ struct MeatList: View {
                                                         numbernew -= 1
                                                     }
                                                 }
-                                            
                                             ButtonImage(Imagename:"plus.square.fill")
                                                 .onTapGesture {
                                                     numbernew += 1
@@ -86,8 +85,7 @@ struct MeatList: View {
                                                 chock.toggle() }
                                             else{
                                                 chock_again.toggle()
-                                            }
-                                        }
+                                        }  }
                                 }
                                 VStack{
                                     Spacer()
@@ -102,9 +100,7 @@ struct MeatList: View {
                                             .onTapGesture {
                                                 MyData.mark(id: mu.id, Lk:mu.like ? false : true)
                                                 MyData.addlike(value: mu, quanty: numbernew)
-                                                
-                                            }
-                                    }
+                                       }  }
                                     Spacer()
                                 }
                                 VStack{

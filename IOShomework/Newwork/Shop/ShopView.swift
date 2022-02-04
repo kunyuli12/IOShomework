@@ -18,7 +18,7 @@ struct ShopView: View {
                         Rectangle()
                             .frame(width: 300, height: 120, alignment: .center)
                             .cornerRadius(15)
-                        Text("蔬菜清單")
+                        Text("葉菜類清單")
                             .font(.title)
                             .foregroundColor(.black)
                     }
@@ -33,7 +33,7 @@ struct ShopView: View {
                         Rectangle()
                             .frame(width: 300, height: 120, alignment: .center)
                             .cornerRadius(15)
-                        Text("水果清單")
+                        Text("水果和其他類清單")
                             .font(.title)
                             .foregroundColor(.black)
                     }

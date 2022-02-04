@@ -41,8 +41,6 @@ struct ProductView: View {
                         .modifier(textmod())
                     Text("保存期限:\(times)")
                         .modifier(textmod())
-                    Text("青農資訊：")
-                        .modifier(textmod())
                     HStack {
                         Text("營養資訊")
                             .font(.title3)
