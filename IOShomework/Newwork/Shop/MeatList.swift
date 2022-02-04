@@ -85,8 +85,10 @@ struct MeatList: View {
                                                 chock.toggle() }
                                             else{
                                                 chock_again.toggle()
-                                        }  }
+                                            }  }
                                 }
+                                .blur(radius: chock ? 9 : 0)
+                                .blur(radius: chock_again ? 9 : 0)
                                 VStack{
                                     Spacer()
                                         .frame (height:110)
@@ -100,9 +102,10 @@ struct MeatList: View {
                                             .onTapGesture {
                                                 MyData.mark(id: mu.id, Lk:mu.like ? false : true)
                                                 MyData.addlike(value: mu, quanty: numbernew)
-                                       }  }
+                                            }  }
                                     Spacer()
-                                }
+                                }.blur(radius: chock ? 9 : 0)
+                                    .blur(radius: chock_again ? 9 : 0)
                                 VStack{
                                     Spacer()
                                     Text("確定購買？")
@@ -118,8 +121,8 @@ struct MeatList: View {
                                             .cornerRadius(10)
                                             .onTapGesture {
                                                 chock.toggle()
-                                        }
-
+                                            }
+                                        
                                         Text("確定")
                                             .font(.system(size: 35, weight: .heavy, design: .rounded))
                                             .foregroundColor(.white)
@@ -130,7 +133,7 @@ struct MeatList: View {
                                                 MyData.addOrder(value: mu, quanty: numbernew)
                                                 numbernew = 0
                                                 chock.toggle()
-                                        }
+                                            }
                                     }
                                     Spacer()
                                 }.frame(width: 340, height: 200)

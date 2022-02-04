@@ -86,6 +86,8 @@ struct VegetableView: View {
                                                 chock_again.toggle()
                                         }  }
                                 }
+                                .blur(radius: chock ? 9 : 0)
+                                .blur(radius: chock_again ? 9 : 0)
                                 VStack{
                                     Spacer()
                                         .frame (height:110)
@@ -102,6 +104,8 @@ struct VegetableView: View {
                                        }  }
                                     Spacer()
                                 }
+                                .blur(radius: chock ? 9 : 0)
+                                .blur(radius: chock_again ? 9 : 0)
                                 VStack{
                                     Spacer()
                                     Text("確定購買？")

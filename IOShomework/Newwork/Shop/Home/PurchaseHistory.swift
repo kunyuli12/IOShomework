@@ -15,7 +15,7 @@ struct PurchaseHistory: View {
     ]
     @State var showOrder = false
     @State var indexId = 0
-    
+    @State var anser = 0
     
     var body: some View {
         VStack {
@@ -25,7 +25,7 @@ struct PurchaseHistory: View {
             ScrollView(showsIndicators:false) {
                 ForEach(0..<MyData.Orders.count,id:\.self){ od in
                     HStack {
-                        Text("\(od)")
+                        Text("第\(od)筆")
                             .offset(x:-40)
                             .font(.title)
                         VStack{
@@ -72,7 +72,7 @@ struct PurchaseHistory: View {
                             VStack{
                                 Text("\(myod.menu.name)")
                                 .font(.title)
-                            Text("(\(myod.menu.infrom.foodweight)/一份|\(myod.menu.prise)元)")
+                            Text("(一份|\(myod.menu.prise)元)")
                             }
                             Text("\(myod.numbers)")
                                 .font(.title2)
