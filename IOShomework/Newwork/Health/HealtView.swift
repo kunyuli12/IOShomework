@@ -48,6 +48,7 @@ struct HealtView: View {
                             .background(Color(.red))
                             .cornerRadius(4)
                             .foregroundColor(.white)
+                            
                     }
                 }
                 Spacer()

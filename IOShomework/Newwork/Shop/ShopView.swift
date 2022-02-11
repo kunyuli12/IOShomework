@@ -8,38 +8,28 @@
 import SwiftUI
 
 struct ShopView: View {
+    
+    @EnvironmentObject var MyData:ShopMenu
+    
     var body: some View {
         NavigationView{
             VStack{
+                ForEach(MyData.Shoppingtest){ sh in
                 NavigationLink{
-                    MeatList()
+                    VegetableView(MyShopes: sh)
                 } label: {
                     ZStack {
                         Rectangle()
                             .frame(width: 300, height: 120, alignment: .center)
                             .cornerRadius(15)
-                        Text("葉菜類清單")
-                            .font(.title)
-                            .foregroundColor(.black)
-                    }
-                }
-                Spacer()
-                    .frame(height: 40)
-                
-                NavigationLink{
-                    VegetableView()
-                } label: {
-                    ZStack {
-                        Rectangle()
-                            .frame(width: 300, height: 120, alignment: .center)
-                            .cornerRadius(15)
-                        Text("水果和其他類清單")
+                        Text("\(sh.boxname)")
                             .font(.title)
                             .foregroundColor(.black)
                     }
                 }
                 Spacer()
                     .frame(height: 30)
+                }
             }.navigationBarTitle(Text("選擇食材清單"),displayMode: .inline)
         }
         

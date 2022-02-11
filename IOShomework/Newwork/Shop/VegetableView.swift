@@ -10,13 +10,13 @@ import SwiftUI
 struct VegetableView: View {
     @State var textview :String = ""
     @EnvironmentObject var MyData:ShopMenu
-    @EnvironmentObject var cacu:Cacus
     @State var onoff = false
     @State var shownumber = ""
     @State var numbernew:Int = 0
     @State var anser:Int = 0
     @State var chock = false
     @State var chock_again = false
+    @State var MyShopes = listmenu(boxname: "", showmenu: [menu(ItemView: "", prise:0, name: "", infrom: foodinfrom(foodweight: "", supply: "", foodtime: ""), swNumber: 0, like: false),])
     
     var body: some View {
         VStack{
@@ -37,7 +37,7 @@ struct VegetableView: View {
                 }
             }
             ScrollView(showsIndicators:false) {
-                ForEach(MyData.ShoppingsFu){ mu in //mu 是每次回圈時所帶的值
+                ForEach(MyShopes.showmenu){ mu in //mu 是每次回圈時所帶的值
                     NavigationLink{
                         VStack {
                             ZStack{
@@ -193,6 +193,6 @@ struct VegetableView: View {
 struct VegetableView_Previews: PreviewProvider {
     static var previews: some View {
         VegetableView().environmentObject(ShopMenu())
-            .environmentObject(Cacus())
+           
     }
 }

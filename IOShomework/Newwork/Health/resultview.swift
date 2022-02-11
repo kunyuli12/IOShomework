@@ -10,7 +10,9 @@ import SwiftUI
 struct resultview: View {
     @State var VGnumber:Float = 0.0
     @State var Friutnumber:Float = 0.0
+    @State var anseres:Int = 0
     @State var issure:Bool = false
+    @EnvironmentObject var AgeViews:VGinform
     
     var body: some View {
         ZStack {
@@ -24,6 +26,50 @@ struct resultview: View {
                     Rectangle()
                         .frame(maxWidth:.infinity)
                         .frame(height: 1)
+                    ScrollView(showsIndicators:false) {
+                    ForEach(AgeViews.showOrder){ od in
+                        HStack {
+                            Image("\(od.menu.ItemView)")
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .cornerRadius(10)
+                                .padding(.leading,20)
+                            VStack {
+                                Text("\(od.menu.name)")
+                                    .font(.title)
+                                Text("(\(od.menu.infrom.foodweight)/一份|\(od.menu.prise)元)")
+                            }
+                            Spacer()
+                            HStack {
+                                Text("\(od.numbers)")
+                                    .font(.title2)
+                                    .frame(width: 56, height: 40)
+                                    .cornerRadius(5)
+                                    .background(Color("healthybuttom3"))
+                                Image(systemName: "minus.square.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(.gray)
+                                    .cornerRadius(5)
+                                    .onTapGesture {
+                                        AgeViews.lowerOrder(value: od.menu)
+                                        anseres = AgeViews.sumPrise(temp_orders: AgeViews.showOrder)
+                                    }
+                                Image(systemName: "plus.square.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(.gray)
+                                    .cornerRadius(5)
+                                    .onTapGesture {
+                                        AgeViews.addOrder(value: od.menu,quanty: 1)
+                                        anseres = AgeViews.sumPrise(temp_orders: AgeViews.showOrder)
+                                    }
+                            }.padding(.leading,15)
+                            Spacer()
+                            
+                        }
+                    }
+                    }
                     Spacer()
                     Text("水果需要\(String(format: "%.0f",Friutnumber))份")
                         .font(.title)

@@ -10,6 +10,7 @@ import SwiftUI
 struct BoxView: View {
     @State var textview :String = ""
     @EnvironmentObject var MyData:ShopMenu
+    @EnvironmentObject var AllMenu:VGinform
     @State var onoff = false
     @State var shownumber = ""
     @State var numbernew:Int = 0
@@ -37,7 +38,7 @@ struct BoxView: View {
                 }
             }
             ScrollView(showsIndicators:false) {
-                ForEach(MyData.Shoppingsall){ mu in //mu 是每次回圈時所帶的值
+                ForEach(AllMenu.Shoppingsall){ mu in //mu 是每次回圈時所帶的值
                     NavigationLink{
                         VStack {
                             ZStack{
@@ -97,11 +98,7 @@ struct BoxView: View {
                                             .resizable()
                                             .frame(width: 50, height: 50)
                                             .foregroundColor(mu.like ? Color("lightred") : Color(.gray))
-                                            .padding(.trailing,20)
-                                            .onTapGesture {
-                                                MyData.mark(id: mu.id, Lk:mu.like ? false : true)
-                                                MyData.addlike(value: mu, quanty: numbernew)
-                                       }  }
+                                            .padding(.trailing,20)}
                                     Spacer()
                                 }
                                 .blur(radius: chock ? 9 : 0)
@@ -130,7 +127,7 @@ struct BoxView: View {
                                             .background(Color(.red))
                                             .cornerRadius(10)
                                             .onTapGesture {
-                                                MyData.addOrder(value: mu, quanty: numbernew)
+                                                AllMenu.addOrder(value: mu, quanty: numbernew)
                                                 numbernew = 0
                                                 chock.toggle()
                                         }
