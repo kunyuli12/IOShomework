@@ -11,8 +11,10 @@ struct resultview: View {
     @State var VGnumber:Float = 0.0
     @State var Friutnumber:Float = 0.0
     @State var anseres:Int = 0
+    @State var prisetoltol:Int = 0
     @State var issure:Bool = false
     @EnvironmentObject var AgeViews:VGinform
+    @EnvironmentObject var MyData:ShopMenu
     
     var body: some View {
         ZStack {
@@ -21,6 +23,9 @@ struct resultview: View {
                     .font(.largeTitle)
                 VStack {
                     Text("蔬菜需要\(String(format: "%.0f",VGnumber))份")
+                        .font(.title)
+                        .padding(4)
+                    Text("水果需要\(String(format: "%.0f",Friutnumber))份")
                         .font(.title)
                         .padding(4)
                     Rectangle()
@@ -54,6 +59,7 @@ struct resultview: View {
                                     .onTapGesture {
                                         AgeViews.lowerOrder(value: od.menu)
                                         anseres = AgeViews.sumPrise(temp_orders: AgeViews.showOrder)
+                                        
                                     }
                                 Image(systemName: "plus.square.fill")
                                     .resizable()
@@ -71,16 +77,22 @@ struct resultview: View {
                     }
                     }
                     Spacer()
-                    Text("水果需要\(String(format: "%.0f",Friutnumber))份")
-                        .font(.title)
                     Rectangle()
                         .frame(maxWidth:.infinity)
                         .frame(height: 1)
+                    Text("目前水果\(String(format: "%.0f",Friutnumber))份，蔬菜\(String(format: "%.0f",VGnumber))份")
+                        .font(.title)
+                   
                     Spacer()
                     
                 }.frame(width: 380, height: 540)
                     .background(Color("確定Color"))
                 .cornerRadius(20)
+                Text("總金額：\(anseres)")
+                    .font(.title2)
+                    .onTapGesture {
+                        anseres = AgeViews.sumPrise(temp_orders: AgeViews.showOrder)
+                    }
                 HStack {
                     NavigationLink{
                         BoxView()
@@ -135,6 +147,9 @@ struct resultview: View {
                     .cornerRadius(10)
                     .onTapGesture {
                         issure.toggle()
+                        MyData.Orders.append(order(onOrder: AgeViews.showOrder))
+                        AgeViews.showOrder.removeAll()
+                        anseres = 0
                     }
                
             }

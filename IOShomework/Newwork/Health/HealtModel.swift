@@ -147,7 +147,6 @@ class VGinform:ObservableObject {
         let anser = prises*number
         return anser
     }
-    
     func sumPrise(temp_orders:[Oder]) -> Int {
         
         var sum = 0
