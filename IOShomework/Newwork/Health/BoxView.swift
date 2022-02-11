@@ -10,7 +10,6 @@ import SwiftUI
 struct BoxView: View {
     @State var textview :String = ""
     @EnvironmentObject var MyData:ShopMenu
-    @EnvironmentObject var cacu:Cacus
     @State var onoff = false
     @State var shownumber = ""
     @State var numbernew:Int = 0
@@ -19,6 +18,7 @@ struct BoxView: View {
     @State var chock_again = false
     
     var body: some View {
+        
         VStack{
             HStack {
                 TextField("搜尋...",text: $textview)
@@ -194,6 +194,5 @@ struct BoxView: View {
 struct BoxView_Previews: PreviewProvider {
     static var previews: some View {
         BoxView().environmentObject(ShopMenu())
-            .environmentObject(Cacus())
     }
 }
