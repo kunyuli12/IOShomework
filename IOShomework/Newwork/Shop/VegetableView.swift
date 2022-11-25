@@ -9,14 +9,14 @@ import SwiftUI
 
 struct VegetableView: View {
     @State var textview :String = ""
-    @EnvironmentObject var MyData:ShopMenu
-    @State var onoff = false
-    @State var shownumber = ""
+    @EnvironmentObject var MyData:ShopMenu//Shop的Ｍodel
+    @State var onoff = false//按鈕開關
+    @State var shownumber = ""//價錢計算
     @State var numbernew:Int = 0
-    @State var anser:Int = 0
-    @State var chock = false
-    @State var chock_again = false
-    @State var MyShopes = listmenu(boxname: "", showmenu: [menu(ItemView: "", prise:0, name: "", infrom: foodinfrom(foodweight: "", supply: "", foodtime: ""), swNumber: 0, like: false),])
+    @State var anser:Int = 0//計算結果
+    @State var chock = false//按鈕開關
+    @State var chock_again = false//按鈕開關
+    @State var MyShopes = listmenu(boxname: "", showmenu: [menu(ItemView: "", prise:0, name: "", infrom: foodinfrom(foodweight: "", supply: "", foodtime: ""), swNumber: 0, like: false),])//資料庫
     
     var body: some View {
         VStack{
@@ -165,22 +165,22 @@ struct VegetableView: View {
                         }
                     } label:{
                         HStack{
-                            Image("\(mu.ItemView)")
+                            Image("\(mu.ItemView)")//
                                 .resizable()
                                 .frame(width: 110, height: 110)
                                 .cornerRadius(20)
                             VStack{
-                                Text("\(mu.name)")
+                                Text("\(mu.name)")//
                                     .font(.title)
                                     .padding(.vertical,10)
                                     .foregroundColor(.black)
-                                Text("＄\(mu.prise)元(NT)")
+                                Text("＄\(mu.prise)元(NT)")//
                                     .font(.title)
                                     .padding(.bottom,10)
                                     .foregroundColor(.black)
                             }.padding(.vertical,10)
                             Spacer()
-                        }.frame(maxWidth:.infinity)
+                        }.frame(maxWidth:.infinity)//寬度最寬
                             .padding(.leading,15)
                     }
                 }

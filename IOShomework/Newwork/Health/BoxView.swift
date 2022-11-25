@@ -9,7 +9,6 @@ import SwiftUI
 
 struct BoxView: View {
     @State var textview :String = ""
-    @EnvironmentObject var MyData:ShopMenu
     @EnvironmentObject var AllMenu:VGinform
     @State var onoff = false
     @State var shownumber = ""
@@ -190,6 +189,6 @@ struct BoxView: View {
 
 struct BoxView_Previews: PreviewProvider {
     static var previews: some View {
-        BoxView().environmentObject(ShopMenu())
+        BoxView().environmentObject(VGinform())
     }
 }

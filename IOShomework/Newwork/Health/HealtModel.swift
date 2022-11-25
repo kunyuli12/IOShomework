@@ -8,19 +8,19 @@
 import Foundation
 
 
-struct AgeModel_B:Identifiable,Hashable,Codable {
+struct AgeModel_B:Identifiable,Hashable,Codable {//男生的Model
     var id = UUID().uuidString
-    var AGEname:String
-    var AGEnumber:Float
-    var NeedVG:Float
-    var NeedFurit:Float
+    var AGEname:String//男生年齡範圍
+    var AGEnumber:Float//人口數量
+    var NeedVG:Float//需要的蔬菜量
+    var NeedFurit:Float//需要的水果量
 }
-struct AgeModel_G:Identifiable,Hashable,Codable {
+struct AgeModel_G:Identifiable,Hashable,Codable {//女生的Model
     var id = UUID().uuidString
-    var AGEname:String
-    var AGEnumber:Float
-    var NeedVG:Float
-    var NeedFurit:Float
+    var AGEname:String//女生年齡範圍
+    var AGEnumber:Float//人口數量
+    var NeedVG:Float//需要的蔬菜量
+    var NeedFurit:Float//需要的水果量
 }
 class VGinform:ObservableObject {
     @Published var AGEbox_B:[AgeModel_B] = [AgeModel_B]()
@@ -36,7 +36,7 @@ class VGinform:ObservableObject {
         shoping()
     }
     
-    func shoping()  {
+    func shoping()  {//商品資料庫
         Shoppingsall = [
             menu(ItemView: "images-2", prise:30, name: "白花芥藍", infrom: foodinfrom(foodweight: "?", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
             menu(ItemView: "images-3", prise:50, name: "白花椰", infrom: foodinfrom(foodweight: "?", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
@@ -94,7 +94,7 @@ class VGinform:ObservableObject {
         ]
         
     }
-    func SexboxB() {
+    func SexboxB() {//男生人數資料
         AGEbox_B = [
             AgeModel_B(AGEname: "2~6", AGEnumber: 0,NeedVG: 3,NeedFurit: 2),
             AgeModel_B(AGEname: "7~12", AGEnumber: 0,NeedVG: 4,NeedFurit: 3),
@@ -105,7 +105,7 @@ class VGinform:ObservableObject {
             AgeModel_B(AGEname: "71以上", AGEnumber: 0,NeedVG: 3,NeedFurit: 2)
         ]
     }
-    func SexboxG() {
+    func SexboxG() {//女生人數資料
         AGEbox_G = [
             AgeModel_G(AGEname: "2~6", AGEnumber: 0,NeedVG: 3,NeedFurit: 2),
             AgeModel_G(AGEname: "7~12", AGEnumber: 0,NeedVG: 4,NeedFurit: 3),
@@ -127,7 +127,7 @@ class VGinform:ObservableObject {
         }else{
             showOrder.append(Oder(menu: value, numbers: quanty))
         }
-    }
+    }//增加商品數量
     func lowerOrder(value:menu ){
         let Index = showOrder.firstIndex(where: { od in
             od.menu.name == value.name
@@ -142,11 +142,11 @@ class VGinform:ObservableObject {
         }else{
             showOrder.append(Oder(menu: value, numbers: 1))
         }
-    }
+    }//減少商品數量
     func toltolprise(prises:Int ,number:Int ) -> Int {
         let anser = prises*number
         return anser
-    }
+    }//總計全部購買商品價格
     func sumPrise(temp_orders:[Oder]) -> Int {
         
         var sum = 0
@@ -156,7 +156,7 @@ class VGinform:ObservableObject {
         }
         
         return sum
-    }
+    }//計算單一比商品價格
     
     func AddBoy (value:AgeModel_B,quanty:Float ){
         let Index = AGEbox_B.firstIndex(where: { ad in
@@ -165,7 +165,7 @@ class VGinform:ObservableObject {
         if (Index != nil) {
             AGEbox_B[Index!].AGEnumber += quanty
         }
-    }
+    }//增加男生人數
     func LowBoy (value:AgeModel_B,quanty:Float ){
         let Index = AGEbox_B.firstIndex(where: { ad in
             ad.AGEname == value.AGEname
@@ -175,7 +175,7 @@ class VGinform:ObservableObject {
             AGEbox_B[Index!].AGEnumber -= quanty
             }
         }
-    }
+    }//減少男生人數
     func AddGirl (value:AgeModel_G,quanty:Float ){
         let Index = AGEbox_G.firstIndex(where: { ad in
             ad.AGEname == value.AGEname
@@ -183,7 +183,7 @@ class VGinform:ObservableObject {
         if (Index != nil) {
             AGEbox_G[Index!].AGEnumber += quanty
         }
-    }
+    }//增加女生人數
     func LowGirl (value:AgeModel_G,quanty:Float ){
         let Index = AGEbox_G.firstIndex(where: { ad in
             ad.AGEname == value.AGEname
@@ -193,13 +193,12 @@ class VGinform:ObservableObject {
             AGEbox_G[Index!].AGEnumber -= quanty
             }
         }
-    }
+    }//減少女生人數
 
     func FinallyQuanty(quanty:Float ,need:Float ) -> Float {
         let anser = quanty * need
         return anser
-    }
-    
+    }//總計男生女生全部的蔬果建議量
     func VGDemandB(tempBoy:[AgeModel_B]) -> Float {
         
         var sum:Float = 0.0
@@ -220,7 +219,7 @@ class VGinform:ObservableObject {
         }
         return sum
     }//計算總共需要的蔬菜量
-  func FriutDemandB(tempBoy:[AgeModel_B]) -> Float {
+    func FriutDemandB(tempBoy:[AgeModel_B]) -> Float {
       
       var sum:Float = 0.0
       

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HealtView: View {
+struct VgBoxView: View {
     
     @EnvironmentObject var AgeViews:VGinform
     @State var quanty_B:Int = 0
@@ -52,31 +52,31 @@ struct HealtView: View {
                     }
                 }
                 Spacer()
-            }.navigationBarTitle(Text("蔬果防疫箱"))
+            }.navigationBarTitle(Text("蔬果箱"))
         }
     }
     @ViewBuilder func boyview() -> some View{
         HStack {
             VStack(alignment: .leading,spacing: 15){
-                Text("MAN")
+                Text("MAN")//標題
                     .font(.system(size: 30, weight: .heavy, design: .rounded))
-                ForEach(AgeViews.AGEbox_B){ ags in
+                ForEach(AgeViews.AGEbox_B){ ags in //迴圈帶入每個年齡層的資訊
                     VStack(alignment: .leading,spacing: 15){
                         HStack {
-                            AgeView(Agelimits: ags.AGEname)
+                            AgeView(Agelimits: ags.AGEname)//要回圈的文字
                             Text("\(String(format: "%.0f", ags.AGEnumber))人")
                                 .font(.title2)
                             Spacer()
-                            Image(systemName: "minus.circle.fill")
+                            Image(systemName: "minus.circle.fill")//減少的按鍵
                                 .resizable()
                                 .frame(width: 25, height: 25 )
                                 .foregroundColor(isLowTitle == ags.AGEname ? Color.red : Color.blue)
                                 .onTapGesture {
-                                    AgeViews.LowBoy(value: ags, quanty: 1)
+                                    AgeViews.LowBoy(value: ags, quanty: 1)//漸少
                                     anserVGB = AgeViews.VGDemandB(tempBoy: AgeViews.AGEbox_B)
                                     anserFUB = AgeViews.FriutDemandB(tempBoy: AgeViews.AGEbox_B)
-                                    anserVG = anserVGB + anserVGG
-                                    anserFU = anserFUB + anserFUG
+                                    anserVG = anserVGB + anserVGG//計算男生的蔬果量結果
+                                    anserFU = anserFUB + anserFUG//計算女生蔬果量結果
                                     withAnimation(.easeInOut) {
                                         isLowTitle = ags.AGEname
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -84,16 +84,16 @@ struct HealtView: View {
                                         }
                                     }
                                 }
-                            Image(systemName: "plus.circle.fill")
+                            Image(systemName: "plus.circle.fill")//增加的按鍵
                                 .resizable()
                                 .frame(width: 25, height: 25 )
                                 .foregroundColor(isAddTitle == ags.AGEname ? Color.red : Color.blue)
                                 .onTapGesture {
-                                    AgeViews.AddBoy(value: ags,quanty: 1)
+                                    AgeViews.AddBoy(value: ags,quanty: 1)//漸少
                                     anserVGB = AgeViews.VGDemandB(tempBoy: AgeViews.AGEbox_B)
                                     anserFUB = AgeViews.FriutDemandB(tempBoy: AgeViews.AGEbox_B)
-                                    anserVG = anserVGB + anserVGG
-                                    anserFU = anserFUB + anserFUG
+                                    anserVG = anserVGB + anserVGG//計算男生的蔬果量結果
+                                    anserFU = anserFUB + anserFUG//計算女生蔬果量結果
                                     withAnimation(.easeInOut) {
                                         isAddTitle = ags.AGEname
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -170,7 +170,7 @@ struct HealtView: View {
 
 struct HealtView_Previews: PreviewProvider {
     static var previews: some View {
-        HealtView().environmentObject(VGinform())
+        VgBoxView().environmentObject(VGinform())
     }
 }
 

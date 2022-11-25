@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+//未完成
+
 struct Account: View {
     var body: some View {
         VStack {

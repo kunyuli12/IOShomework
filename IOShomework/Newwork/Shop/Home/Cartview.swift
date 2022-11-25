@@ -10,6 +10,8 @@ import SwiftUI
 struct Cartview: View {
     
     @EnvironmentObject var MyData:ShopMenu
+    @ObservedObject var IntegrateDate = Integrate()
+    @ObservedObject var MyDates = ShopMenu()
     @State var isshow = false
     @State var anseres:Int = 0
     
@@ -165,6 +167,8 @@ struct Cartview: View {
                         MyData.showOrder.removeAll()
                         isshow.toggle()
                         anseres = 0
+                      //  MyData.addNews.append(addfirebase(onOrder: MyData.showOrder))
+                      //  MyDates.addAlls(produce:MyData.addNews)
                     }
                     .frame(width: 90, height: 50)
                     .background(Color(.red))

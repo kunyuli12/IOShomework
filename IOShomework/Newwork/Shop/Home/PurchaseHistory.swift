@@ -16,44 +16,47 @@ struct PurchaseHistory: View {
     @State var showOrder = false
     @State var indexId = 0
     @State var anser = 0
-    
     var body: some View {
         VStack {
             Text("Order History")
                 .font(.largeTitle)
             Spacer()
             ScrollView(showsIndicators:false) {
-                ForEach(0..<MyData.Orders.count,id:\.self){ od in
-                    HStack {
-                        Text("第\(od)筆")
-                            .offset(x:-40)
-                            .font(.title)
-                        VStack{
-                            Text("歷史紀錄")
-                                .font(.title)
-                                .foregroundColor(Color(.gray))
-                           
-                            ForEach(myoder){ my in
-                                Text("\(my.menu.prise)元")
-                                    .font(.title2)
-                                    .foregroundColor(Color(.gray))
-                            }
-                            
-                        }
-                    }.frame(width: 370, height: 100)
-                        .background(Color("yellowlight"))
-                        .cornerRadius(20)
-                        .onTapGesture {
-                            showOrder.toggle()
-                            myoder = MyData.Orders[od].onOrder
-                    }
-                }
+                HisView()
             }
         }.blur(radius: showOrder ? 9 : 0)
         .sheet(isPresented: $showOrder){
             showList()
         }
     }
+    @ViewBuilder func HisView() -> some View{
+        ForEach(1..<MyData.Orders.count,id:\.self){ od in
+            HStack {
+                Text("第\(od)筆")
+                    .offset(x:-40)
+                    .font(.title)
+                VStack{
+                    Text("歷史紀錄")
+                        .font(.title)
+                        .foregroundColor(Color(.gray))
+                   
+                    ForEach(myoder){ my in
+                        Text("\(my.menu.prise)元")
+                            .font(.title2)
+                            .foregroundColor(Color(.gray))
+                    }
+                    
+                }
+            }.frame(width: 370, height: 100)
+                .background(Color("yellowlight"))
+                .cornerRadius(20)
+                .onTapGesture {
+                    showOrder.toggle()
+                    myoder = MyData.Orders[od].onOrder
+            }
+        }
+    }
+    
     @ViewBuilder func showList() -> some View{
         ZStack{
             Rectangle()

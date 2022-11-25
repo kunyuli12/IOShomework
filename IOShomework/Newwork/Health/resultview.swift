@@ -142,7 +142,8 @@ struct resultview: View {
                     }
                 Text("確定")
                     .font(.system(size: 35, weight: .heavy, design: .rounded))
-                    .foregroundColor(.white)                    .frame(width: 90, height: 50)
+                    .foregroundColor(.white)
+                    .frame(width: 90, height: 50)
                     .background(Color(.red))
                     .cornerRadius(10)
                     .onTapGesture {
@@ -162,6 +163,6 @@ struct resultview: View {
 
 struct resultview_Previews: PreviewProvider {
     static var previews: some View {
-        resultview()
+        resultview().environmentObject(VGinform())
     }
 }
