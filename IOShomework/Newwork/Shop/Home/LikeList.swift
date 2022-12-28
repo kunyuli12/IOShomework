@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+//未完成
+
 struct LikeList: View {
     
     @EnvironmentObject var MyData:ShopMenu

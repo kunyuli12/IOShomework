@@ -5,34 +5,46 @@
 //  Created by 暨大附中03 on 2021/12/3.
 //
 
-import Foundation
+
 import SwiftUI
 import Combine
+import FirebaseFirestore
+import FirebaseFirestoreSwift
+
+struct listmenu: Identifiable,Hashable,Codable{
+    var id = UUID().uuidString
+    var boxname:String//分類的清單名稱
+    var showmenu:[menu]//
+}
 
 struct menu: Identifiable,Hashable,Codable{
     var id = UUID().uuidString
-    var ItemView:String
-    var prise:Int
-    var name:String
-    var infrom:foodinfrom
-    var swNumber:Int
-    var like:Bool
+    var ItemView:String//
+    var prise:Int//價格
+    var name:String//商品名稱
+    var infrom:foodinfrom//連接foodinfrom
+    var swNumber:Int//商品數量
+    var like:Bool//開關
 }
 
 struct Oder: Identifiable,Hashable,Codable{
     var id = UUID().uuidString
-    var menu:menu
-    var numbers:Int
+    var menu:menu//連接menu
+    var numbers:Int//商品數量
 }
 
 struct foodinfrom: Identifiable,Hashable,Codable{
     var id = UUID().uuidString
-    var foodweight:String
-    var supply:String
-    var foodtime:String
+    var foodweight:String//商品重量
+    var supply:String//生產者
+    var foodtime:String//保存期限
 }
 
 struct order:Identifiable,Hashable,Codable {
+    var id = UUID().uuidString
+    var onOrder:[Oder]
+}
+struct addfirebase:Identifiable,Hashable,Codable {
     var id = UUID().uuidString
     var onOrder:[Oder]
 }
@@ -40,21 +52,26 @@ struct order:Identifiable,Hashable,Codable {
 
                //傳值
 class ShopMenu:ObservableObject {
-    
     @Published var en_number = 0
+    @Published var Shoppingtest:[listmenu] = [listmenu]()
     @Published var Shoppings:[menu] = [menu]() //要回傳的，所以要先去宣告一個職
-    @Published var ShoppingsFu:[menu] = [menu]()
     @Published var showOrder = [Oder]()
     @Published var likeOrder = [Oder]()
     @Published var Orders = [order]()
+    @Published var addNews = [addfirebase]()
     @Published var onoffs:Bool =  false
-    @Published var Shoppingsall:[menu] = [menu]()
+    
     
     init(){
         shoping()
         Orders = [
             order(onOrder: showOrder)
         ]
+        addNews = [
+            addfirebase(onOrder: showOrder)
+        ]
+        listenData()
+        listenDatas()
     }
     func shoping()  {
         Shoppings = [
@@ -82,96 +99,67 @@ class ShopMenu:ObservableObject {
             menu(ItemView: "cabbage＿sprouts", prise:35, name: "高麗菜芽", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
             menu(ItemView: "Cabbage", prise:50, name: "高麗菜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
         ]
-        ShoppingsFu = [
-            menu(ItemView: "images-21", prise:35, name: "木瓜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-22", prise:55, name: "臍橙", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
-            menu(ItemView: "images-23", prise:140, name: "小蕃茄", infrom: foodinfrom(foodweight: "?", supply: "周芳民", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-24", prise:20, name: "無籽檸檬", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-25", prise:30, name: "柳丁", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-26", prise:30, name: "香蕉", infrom: foodinfrom(foodweight: "?", supply: "張豐巖", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
-            menu(ItemView: "images-27", prise:50, name: "金棗", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images", prise:88, name: "牛奶玉米", infrom: foodinfrom(foodweight: "40", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-5", prise:50, name: "香菇", infrom: foodinfrom(foodweight: "?", supply: "葉光輝", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-6", prise:25, name: "杏鮑菇", infrom: foodinfrom(foodweight: "?", supply: "方永芳", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "cucumber", prise:45, name: "小黃瓜", infrom: foodinfrom(foodweight: "?", supply: "黃仁違", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-7", prise:30, name:"木耳", infrom: foodinfrom(foodweight: "?", supply: "豐年農場", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-7", prise:30, name: "木耳", infrom: foodinfrom(foodweight: "?", supply: "游景", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-8", prise:109, name: "銀耳", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "Hongxi＿Mushroom", prise:30, name: "鴻禧菇 ", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-28", prise:30, name: "白美人菇", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-29", prise:30, name: "黑美人菇", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-30", prise:85, name: "巴西蘑菇", infrom: foodinfrom(foodweight: "?", supply: "蕭貴昇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-31", prise:30, name: "彩椒", infrom: foodinfrom(foodweight: "?", supply: "何嘉軒", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-32", prise:80, name: "茭白筍", infrom: foodinfrom(foodweight: "?", supply: "羅逸豐", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "onion", prise:20, name: "刺蔥", infrom: foodinfrom(foodweight: "?", supply: "張譽庭", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-33", prise:45, name: "白蘿蔔", infrom: foodinfrom(foodweight: "?", supply: "余水永", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-34", prise:60, name: "玉米筍", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-35", prise:30, name: "糯米椒", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-36", prise:35, name: "青蔥", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-37", prise:100, name: "竹薑", infrom: foodinfrom(foodweight: "?", supply: "張豐巖", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
-            menu(ItemView: "images-38", prise:150, name: "乾燥竹薑", infrom: foodinfrom(foodweight: "?", supply: "張豐巖", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-39", prise:25, name: "牛蕃茄", infrom: foodinfrom(foodweight: "?", supply: "王韋智", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
-            menu(ItemView: "images-40", prise:60, name: "青花筍", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-41", prise:40, name: "甜菜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+        Shoppingtest = [
+            listmenu(boxname: "葉菜類清單", showmenu: [
+                menu(ItemView: "images-2", prise:30, name: "白花芥藍", infrom: foodinfrom(foodweight: "?", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-3", prise:50, name: "白花椰", infrom: foodinfrom(foodweight: "?", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
+                menu(ItemView: "images-4", prise:40, name: "牛奶白菜", infrom: foodinfrom(foodweight: "?", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-9", prise:25, name: "甜羅美", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-10", prise:30, name: "大陸妹", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-11", prise:25, name: "咸豐菜", infrom: foodinfrom(foodweight: "?", supply: "謝唯琪", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
+                menu(ItemView: "images-12", prise:25, name: "人參菜", infrom: foodinfrom(foodweight: "?", supply: "謝唯琪", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-13", prise:55, name: "山葵葉", infrom: foodinfrom(foodweight: "?", supply: "陳守安", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-14", prise:35, name: "豆瓣菜", infrom: foodinfrom(foodweight: "?", supply: "黃金山", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-15", prise:35, name: ":黑葉白菜", infrom: foodinfrom(foodweight: "?", supply: "黃金山", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-16", prise:35, name: "龍葵", infrom: foodinfrom(foodweight: "?", supply: "黃金山", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-17", prise:35, name: "黃花芥藍", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-18", prise:30, name: "地瓜葉", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-16", prise:30, name: "龍葵", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "香菜-1100x1100", prise:30, name: "香菜", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-19", prise:30, name: "韭菜", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-10", prise:30, name: "福山萵苣", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-20", prise:35, name: "羽衣甘藍", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "Cabbage", prise:50, name: "高麗菜", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "Gracilaria", prise:30, name: "龍鬚菜", infrom: foodinfrom(foodweight: "?", supply: "白炳輝", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "spinach", prise:40, name: "菠菜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "cabbage＿sprouts", prise:35, name: "高麗菜芽", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "Cabbage", prise:50, name: "高麗菜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+            ]),
+            listmenu(boxname: "水果類和其他類清單", showmenu: [
+                menu(ItemView: "images-21", prise:35, name: "木瓜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-22", prise:55, name: "臍橙", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
+                menu(ItemView: "images-23", prise:140, name: "小蕃茄", infrom: foodinfrom(foodweight: "?", supply: "周芳民", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-24", prise:20, name: "無籽檸檬", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-25", prise:30, name: "柳丁", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-26", prise:30, name: "香蕉", infrom: foodinfrom(foodweight: "?", supply: "張豐巖", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
+                menu(ItemView: "images-27", prise:50, name: "金棗", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images", prise:88, name: "牛奶玉米", infrom: foodinfrom(foodweight: "40", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-5", prise:50, name: "香菇", infrom: foodinfrom(foodweight: "?", supply: "葉光輝", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-6", prise:25, name: "杏鮑菇", infrom: foodinfrom(foodweight: "?", supply: "方永芳", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "cucumber", prise:45, name: "小黃瓜", infrom: foodinfrom(foodweight: "?", supply: "黃仁違", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-7", prise:30, name:"木耳", infrom: foodinfrom(foodweight: "?", supply: "豐年農場", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-7", prise:30, name: "木耳", infrom: foodinfrom(foodweight: "?", supply: "游景", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-8", prise:109, name: "銀耳", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "Hongxi＿Mushroom", prise:30, name: "鴻禧菇 ", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-28", prise:30, name: "白美人菇", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-29", prise:30, name: "黑美人菇", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-30", prise:85, name: "巴西蘑菇", infrom: foodinfrom(foodweight: "?", supply: "蕭貴昇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-31", prise:30, name: "彩椒", infrom: foodinfrom(foodweight: "?", supply: "何嘉軒", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-32", prise:80, name: "茭白筍", infrom: foodinfrom(foodweight: "?", supply: "羅逸豐", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "onion", prise:20, name: "刺蔥", infrom: foodinfrom(foodweight: "?", supply: "張譽庭", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-33", prise:45, name: "白蘿蔔", infrom: foodinfrom(foodweight: "?", supply: "余水永", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-34", prise:60, name: "玉米筍", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-35", prise:30, name: "糯米椒", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-36", prise:35, name: "青蔥", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-37", prise:100, name: "竹薑", infrom: foodinfrom(foodweight: "?", supply: "張豐巖", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
+                menu(ItemView: "images-38", prise:150, name: "乾燥竹薑", infrom: foodinfrom(foodweight: "?", supply: "張豐巖", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-39", prise:25, name: "牛蕃茄", infrom: foodinfrom(foodweight: "?", supply: "王韋智", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
+                menu(ItemView: "images-40", prise:60, name: "青花筍", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                menu(ItemView: "images-41", prise:40, name: "甜菜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+            ])
         ]
-        Shoppingsall = [
-            menu(ItemView: "images-2", prise:30, name: "白花芥藍", infrom: foodinfrom(foodweight: "?", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-3", prise:50, name: "白花椰", infrom: foodinfrom(foodweight: "?", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
-            menu(ItemView: "images-4", prise:40, name: "牛奶白菜", infrom: foodinfrom(foodweight: "?", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-9", prise:25, name: "甜羅美", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-10", prise:30, name: "大陸妹", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-11", prise:25, name: "咸豐菜", infrom: foodinfrom(foodweight: "?", supply: "謝唯琪", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
-            menu(ItemView: "images-12", prise:25, name: "人參菜", infrom: foodinfrom(foodweight: "?", supply: "謝唯琪", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-13", prise:55, name: "山葵葉", infrom: foodinfrom(foodweight: "?", supply: "陳守安", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-14", prise:35, name: "豆瓣菜", infrom: foodinfrom(foodweight: "?", supply: "黃金山", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-15", prise:35, name: ":黑葉白菜", infrom: foodinfrom(foodweight: "?", supply: "黃金山", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-16", prise:35, name: "龍葵", infrom: foodinfrom(foodweight: "?", supply: "黃金山", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-17", prise:35, name: "黃花芥藍", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-18", prise:30, name: "地瓜葉", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-16", prise:30, name: "龍葵", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "香菜-1100x1100", prise:30, name: "香菜", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-19", prise:30, name: "韭菜", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-10", prise:30, name: "福山萵苣", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-20", prise:35, name: "羽衣甘藍", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "Cabbage", prise:50, name: "高麗菜", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "Gracilaria", prise:30, name: "龍鬚菜", infrom: foodinfrom(foodweight: "?", supply: "白炳輝", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "spinach", prise:40, name: "菠菜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "cabbage＿sprouts", prise:35, name: "高麗菜芽", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "Cabbage", prise:50, name: "高麗菜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-21", prise:35, name: "木瓜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-22", prise:55, name: "臍橙", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
-            menu(ItemView: "images-23", prise:140, name: "小蕃茄", infrom: foodinfrom(foodweight: "?", supply: "周芳民", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-24", prise:20, name: "無籽檸檬", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-25", prise:30, name: "柳丁", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-26", prise:30, name: "香蕉", infrom: foodinfrom(foodweight: "?", supply: "張豐巖", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
-            menu(ItemView: "images-27", prise:50, name: "金棗", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images", prise:88, name: "牛奶玉米", infrom: foodinfrom(foodweight: "40", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-5", prise:50, name: "香菇", infrom: foodinfrom(foodweight: "?", supply: "葉光輝", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-6", prise:25, name: "杏鮑菇", infrom: foodinfrom(foodweight: "?", supply: "方永芳", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "cucumber", prise:45, name: "小黃瓜", infrom: foodinfrom(foodweight: "?", supply: "黃仁違", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-7", prise:30, name:"木耳", infrom: foodinfrom(foodweight: "?", supply: "豐年農場", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-7", prise:30, name: "木耳", infrom: foodinfrom(foodweight: "?", supply: "游景", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-8", prise:109, name: "銀耳", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "Hongxi＿Mushroom", prise:30, name: "鴻禧菇 ", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-28", prise:30, name: "白美人菇", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-29", prise:30, name: "黑美人菇", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-30", prise:85, name: "巴西蘑菇", infrom: foodinfrom(foodweight: "?", supply: "蕭貴昇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-31", prise:30, name: "彩椒", infrom: foodinfrom(foodweight: "?", supply: "何嘉軒", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-32", prise:80, name: "茭白筍", infrom: foodinfrom(foodweight: "?", supply: "羅逸豐", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "onion", prise:20, name: "刺蔥", infrom: foodinfrom(foodweight: "?", supply: "張譽庭", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-33", prise:45, name: "白蘿蔔", infrom: foodinfrom(foodweight: "?", supply: "余水永", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-34", prise:60, name: "玉米筍", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-35", prise:30, name: "糯米椒", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-36", prise:35, name: "青蔥", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-37", prise:100, name: "竹薑", infrom: foodinfrom(foodweight: "?", supply: "張豐巖", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
-            menu(ItemView: "images-38", prise:150, name: "乾燥竹薑", infrom: foodinfrom(foodweight: "?", supply: "張豐巖", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-39", prise:25, name: "牛蕃茄", infrom: foodinfrom(foodweight: "?", supply: "王韋智", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
-            menu(ItemView: "images-40", prise:60, name: "青花筍", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-            menu(ItemView: "images-41", prise:40, name: "甜菜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
-        ]
-    }
-    
-  
+        
+    }//資料庫
     
     func mark(id:String,Lk:Bool){
        var index = Shoppings.firstIndex { me in
@@ -180,7 +168,7 @@ class ShopMenu:ObservableObject {
         Shoppings[index].like = Lk
     }
     
-    func addOrder(value:menu,quanty:Int ){
+    func addOrder(value:menu,quanty:Int ){//增加商品數量
         let Index = showOrder.firstIndex(where: { od in
             od.menu.name == value.name
         })
@@ -191,7 +179,7 @@ class ShopMenu:ObservableObject {
             showOrder.append(Oder(menu: value, numbers: quanty))
         }
     }
-    func lowerOrder(value:menu ){
+    func lowerOrder(value:menu ){//減少商品數量
         let Index = showOrder.firstIndex(where: { od in
             od.menu.name == value.name
         })
@@ -206,7 +194,7 @@ class ShopMenu:ObservableObject {
             showOrder.append(Oder(menu: value, numbers: 1))
         }
     }
-    func addlike(value:menu,quanty:Int ){
+    func addlike(value:menu,quanty:Int ){//我的最愛開關判斷
         let Index = likeOrder.firstIndex(where: { od in
             od.menu.like == value.like
         })
@@ -217,12 +205,12 @@ class ShopMenu:ObservableObject {
             likeOrder.append(Oder(menu: value, numbers: quanty))
         }
     }
-    func toltolprise(prises:Int ,number:Int ) -> Int {
+    func toltolprise(prises:Int ,number:Int ) -> Int {//總計全部購買商品價格
         let anser = prises*number
         return anser
     }
     
-    func sumPrise(temp_orders:[Oder]) -> Int {
+    func sumPrise(temp_orders:[Oder]) -> Int {//計算單一筆的價錢ㄋ
         
         var sum = 0
         
@@ -232,7 +220,164 @@ class ShopMenu:ObservableObject {
         
         return sum
     }
+    
+    
+    let path: String = "VGBox"
+    let pathes: String = "VGBoxes"
+    
+    private let store = Firestore.firestore()
+    
+    @Published var shops = [listmenu]()
+    @Published var produce = [addfirebase]()
+    
+    func get(){ //取得資料
+          store.collection(path).getDocuments { (querySnapshot, error) in
+             if let querySnapshot = querySnapshot {
+                self.shops = querySnapshot.documents.compactMap { document in
+                  try? document.data(as: listmenu.self)
+                }
+             }else{
+                 self.shops = [
+                    listmenu(boxname: "葉菜類清單", showmenu: [
+                        menu(ItemView: "images-2", prise:30, name: "白花芥藍", infrom: foodinfrom(foodweight: "?", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-3", prise:50, name: "白花椰", infrom: foodinfrom(foodweight: "?", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
+                        menu(ItemView: "images-4", prise:40, name: "牛奶白菜", infrom: foodinfrom(foodweight: "?", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-9", prise:25, name: "甜羅美", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-10", prise:30, name: "大陸妹", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-11", prise:25, name: "咸豐菜", infrom: foodinfrom(foodweight: "?", supply: "謝唯琪", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
+                        menu(ItemView: "images-12", prise:25, name: "人參菜", infrom: foodinfrom(foodweight: "?", supply: "謝唯琪", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-13", prise:55, name: "山葵葉", infrom: foodinfrom(foodweight: "?", supply: "陳守安", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-14", prise:35, name: "豆瓣菜", infrom: foodinfrom(foodweight: "?", supply: "黃金山", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-15", prise:35, name: ":黑葉白菜", infrom: foodinfrom(foodweight: "?", supply: "黃金山", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-16", prise:35, name: "龍葵", infrom: foodinfrom(foodweight: "?", supply: "黃金山", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-17", prise:35, name: "黃花芥藍", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-18", prise:30, name: "地瓜葉", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-16", prise:30, name: "龍葵", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "香菜-1100x1100", prise:30, name: "香菜", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-19", prise:30, name: "韭菜", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-10", prise:30, name: "福山萵苣", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-20", prise:35, name: "羽衣甘藍", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "Cabbage", prise:50, name: "高麗菜", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "Gracilaria", prise:30, name: "龍鬚菜", infrom: foodinfrom(foodweight: "?", supply: "白炳輝", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "spinach", prise:40, name: "菠菜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "cabbage＿sprouts", prise:35, name: "高麗菜芽", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "Cabbage", prise:50, name: "高麗菜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                    ]),
+                    listmenu(boxname: "水果類和其他類清單", showmenu: [
+                        menu(ItemView: "images-21", prise:35, name: "木瓜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-22", prise:55, name: "臍橙", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
+                        menu(ItemView: "images-23", prise:140, name: "小蕃茄", infrom: foodinfrom(foodweight: "?", supply: "周芳民", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-24", prise:20, name: "無籽檸檬", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-25", prise:30, name: "柳丁", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-26", prise:30, name: "香蕉", infrom: foodinfrom(foodweight: "?", supply: "張豐巖", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
+                        menu(ItemView: "images-27", prise:50, name: "金棗", infrom: foodinfrom(foodweight: "?", supply: "李建南", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images", prise:88, name: "牛奶玉米", infrom: foodinfrom(foodweight: "40", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-5", prise:50, name: "香菇", infrom: foodinfrom(foodweight: "?", supply: "葉光輝", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-6", prise:25, name: "杏鮑菇", infrom: foodinfrom(foodweight: "?", supply: "方永芳", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "cucumber", prise:45, name: "小黃瓜", infrom: foodinfrom(foodweight: "?", supply: "黃仁違", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-7", prise:30, name:"木耳", infrom: foodinfrom(foodweight: "?", supply: "豐年農場", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-7", prise:30, name: "木耳", infrom: foodinfrom(foodweight: "?", supply: "游景", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-8", prise:109, name: "銀耳", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "Hongxi＿Mushroom", prise:30, name: "鴻禧菇 ", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-28", prise:30, name: "白美人菇", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-29", prise:30, name: "黑美人菇", infrom: foodinfrom(foodweight: "?", supply: "莊凱奇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-30", prise:85, name: "巴西蘑菇", infrom: foodinfrom(foodweight: "?", supply: "蕭貴昇", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-31", prise:30, name: "彩椒", infrom: foodinfrom(foodweight: "?", supply: "何嘉軒", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-32", prise:80, name: "茭白筍", infrom: foodinfrom(foodweight: "?", supply: "羅逸豐", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "onion", prise:20, name: "刺蔥", infrom: foodinfrom(foodweight: "?", supply: "張譽庭", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-33", prise:45, name: "白蘿蔔", infrom: foodinfrom(foodweight: "?", supply: "余水永", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-34", prise:60, name: "玉米筍", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-35", prise:30, name: "糯米椒", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-36", prise:35, name: "青蔥", infrom: foodinfrom(foodweight: "?", supply: "陳世閔", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-37", prise:100, name: "竹薑", infrom: foodinfrom(foodweight: "?", supply: "張豐巖", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
+                        menu(ItemView: "images-38", prise:150, name: "乾燥竹薑", infrom: foodinfrom(foodweight: "?", supply: "張豐巖", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-39", prise:25, name: "牛蕃茄", infrom: foodinfrom(foodweight: "?", supply: "王韋智", foodtime: "冷藏5~7天"), swNumber: 0, like: false),//斤
+                        menu(ItemView: "images-40", prise:60, name: "青花筍", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                        menu(ItemView: "images-41", prise:40, name: "甜菜", infrom: foodinfrom(foodweight: "?", supply: "黃詩瑜", foodtime: "冷藏5~7天"), swNumber: 0, like: false),
+                    ])
+                 ]
+             }
+          }
+    }
+    
+    func getes(){ //取得資料
+          store.collection(pathes).getDocuments { (querySnapshot, error) in
+             if let querySnapshot = querySnapshot {
+                self.produce = querySnapshot.documents.compactMap { document in
+                  try? document.data(as: addfirebase.self)
+                }
+             }else{
+                 self.produce = [
+                    addfirebase(onOrder:[
+                    Oder(menu: menu(ItemView: "images-2", prise:30, name: "白花芥藍", infrom: foodinfrom(foodweight: "?", supply: "賴寬宏", foodtime: "冷藏5~7天"), swNumber: 0,like: false), numbers:1)
+                    ])
+                 ]
+                            
+    }
+          }
+    }
+    
+    func addAll(shops:[listmenu]) {//新增整批資料
+        shops.forEach { item in
+          do {
+            _ = try store.collection(path).addDocument(from: item)
+          } catch {
+            fatalError("Unable to add card: \(error.localizedDescription).")
+          }
+        }
+    }
+    
+    func addAlls(produce:[addfirebase]) {//新增整批資料
+        produce.forEach { item in
+          do {
+            _ = try store.collection(pathes).addDocument(from: item)
+          } catch {
+            fatalError("Unable to add card: \(error.localizedDescription).")
+          }
+        }
+    }
+    
+    func add(shop: listmenu) {//新增資料
+        do {
+          _ = try store.collection(path).addDocument(from: shop)
+        } catch {
+          fatalError("Unable to add card: \(error.localizedDescription).")
+        }
+    }
+    func adds(produce:[addfirebase]) {//新增資料
+        do {
+          _ = try store.collection(pathes).addDocument(from: produce)
+        } catch {
+          fatalError("Unable to add card: \(error.localizedDescription).")
+        }
+    }
+    
+    func listenData(){ //監聽資料變化
+        
+        store.collection(path).order(by: "date").addSnapshotListener { (querySnapshot, error) in
+            guard let querySnapshot = querySnapshot else {
+                return
+            }
+                    
+            self.shops = querySnapshot.documents.compactMap { document in
+                try? document.data(as: listmenu.self)
+            }
+        }
+    }
+    func listenDatas(){ //監聽資料變化
+        
+        store.collection(pathes).order(by: "date").addSnapshotListener { (querySnapshot, error) in
+            guard let querySnapshot = querySnapshot else {
+                return
+            }
+                    
+            self.produce = querySnapshot.documents.compactMap { document in
+                try? document.data(as: addfirebase.self)
+            }
+        }
+    }
 }
+    
 
 class Cacus:ObservableObject{
     
@@ -246,7 +391,6 @@ class Cacus:ObservableObject{
         return anser
         
     }
-    
 }
 
 
