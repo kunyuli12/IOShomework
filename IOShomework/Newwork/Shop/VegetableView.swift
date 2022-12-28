@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct VegetableView: View {
+    //蔬果清單
     @State var textview :String = ""
     @EnvironmentObject var MyData:ShopMenu//Shop的Ｍodel
     @State var onoff = false//按鈕開關
@@ -26,7 +27,6 @@ struct VegetableView: View {
                     .textFieldStyle(.roundedBorder)
                 Button{
                     
-    
                 } label: {
                     Image(systemName: "paperplane.fill")
                         .resizable()
